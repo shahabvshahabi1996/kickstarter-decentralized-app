@@ -27,5 +27,6 @@ const deploy = async()=>{
     fs.outputJsonSync(addressPath,data);
 
     console.log(result.options.address);
+    
 };
 deploy();
