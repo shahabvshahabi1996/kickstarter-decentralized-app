@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "compile" : "node compile.js"
+    "compile": "node compile.js",
+    "deploy" : "node deploy.js"
   },
   "author": "Alireza Shahabi",
   "license": "MIT",
