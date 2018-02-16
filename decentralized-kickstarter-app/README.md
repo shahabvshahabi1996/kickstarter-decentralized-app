@@ -1,0 +1,1 @@
+# this is decentralized App made by next and React and Web3
