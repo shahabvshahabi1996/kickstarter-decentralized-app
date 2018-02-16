@@ -9,7 +9,7 @@ export default class CampaignIndex extends Component {
 
     render(){
         return(
-            <h1>hello world</h1>
+            <h1>welcome to the home page</h1>
         )
     }
 }
