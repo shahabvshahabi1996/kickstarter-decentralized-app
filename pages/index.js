@@ -9,8 +9,15 @@ export default class CampaignIndex extends Component {
 
     render(){
         return(
-            <h1>welcome to the home page</h1>
+            <h1 style={styles.textHeaderStyle}>welcome to the home page</h1>
         )
+    }
+}
+
+const styles = {
+    textHeaderStyle : {
+        backgroundColor : '#252525',
+        color : '#ffff',
     }
 }
 
