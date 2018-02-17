@@ -21,6 +21,8 @@
     "next": "^4.1.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "semantic-ui-css": "^2.2.14",
+    "semantic-ui-react": "^0.78.2",
     "solc": "^0.4.19",
     "truffle-hdwallet-provider": "0.0.3",
     "web3": "^1.0.0-beta.26"
