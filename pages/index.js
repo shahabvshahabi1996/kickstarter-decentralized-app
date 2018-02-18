@@ -1,7 +1,8 @@
 import React , {Component} from "react";
-import GridRow, { Button, Card, Grid , Divider , Container , Image , Icon , Popup } from 'semantic-ui-react';
+import { Button, Card, Grid , Divider , Container , Image , Icon , Popup } from 'semantic-ui-react';
+import SimpleCard from './components/SimpleCards';
+
 import factory from '../factory';
-import GridColumn from "semantic-ui-react";
 
 const datas = [
     {
@@ -44,44 +45,7 @@ export default class CampaignIndex extends Component {
                                 <Image size='massive' src='https://placeholdit.co//i/500x580?bg=eeeeee' />
                         </Grid.Column>
                         <Grid.Column width={9}>
-                            <Grid columns={3}>
-                            {datas.map(data => {
-                                return(
-                                <Grid.Row style={{justifyContent : 'center',alignItems : 'center'}}>
-                                    <Grid.Column width={4}>
-                                        <Image  size='small' src='https://placeholdit.co//i/500x300?bg=eeeeee' />
-                                    </Grid.Column>
-                                    <Grid.Column width={10}>
-                                        <Card fluid style={{boxShadow : 'none'}}>
-                                            <Card.Content>
-                                                <Card.Header>
-                                                {data.name}
-                                                </Card.Header>
-                                                <Card.Meta>
-                                                {data.budget} funded
-                                                </Card.Meta>
-                                                <Card.Description>
-                                                {data.description}
-                                                </Card.Description>
-                                            </Card.Content>
-                                        </Card>
-                                    </Grid.Column>
-                                    <Grid.Column textAlign='center' width={2}>
-                                        <Popup
-                                        trigger={<Icon name='heart outline' color='#eee' size='large' />}
-                                        content='Archive it'
-                                        position='top center'
-                                        />
-                                    </Grid.Column>
-                                    <Grid.Column width={16}>
-                                        <Grid.Row>
-                                            <Divider fitted />
-                                        </Grid.Row>    
-                                    </Grid.Column>
-                                </Grid.Row>
-                                )
-                            })}
-                            </Grid>
+                            <SimpleCard datas={datas}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
