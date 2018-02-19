@@ -2,6 +2,8 @@ import React , {Component} from "react";
 import { Button, Card, Grid , Divider , Container , Image , Icon , Popup , Label } from 'semantic-ui-react';
 import SimpleCard from './components/SimpleCards';
 import Navbar from './components/Navbar';
+import TopCampaigns from './components/TopCampaigns';
+
 import factory from '../factory';
 
 const datas = [
@@ -39,27 +41,12 @@ export default class CampaignIndex extends Component {
             <div>    
                 <Navbar/>
                 <Container>
-                    <Grid className="CampaignKeeper" style={{marginTop : '10px'}} columns={2}>
-                        <Grid.Row>
-                            <Grid.Column width={7}>
-                                <Image fluid label={{ as: 'a', corner: 'right', icon: 'heart outline',color : 'red' }} size='massive' src='https://placeholdit.co//i/500x580?bg=eeeeee' />
-                            </Grid.Column>
-                            <Grid.Column width={9}>
-                                <SimpleCard datas={datas}/>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                    <TopCampaigns datas={datas} />
                 </Container>
             </div>
         )
     }
 }
 
-const styles = {
-    textHeaderStyle : {
-        backgroundColor : '#252525',
-        color : '#ffff',
-    }
-}
 
 
