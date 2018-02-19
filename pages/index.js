@@ -1,7 +1,7 @@
 import React , {Component} from "react";
-import { Button, Card, Grid , Divider , Container , Image , Icon , Popup } from 'semantic-ui-react';
+import { Button, Card, Grid , Divider , Container , Image , Icon , Popup , Label } from 'semantic-ui-react';
 import SimpleCard from './components/SimpleCards';
-
+import Navbar from './components/Navbar';
 import factory from '../factory';
 
 const datas = [
@@ -36,19 +36,19 @@ export default class CampaignIndex extends Component {
     }
     render(){
         return(
-            <div>
-            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>    
+            <div>    
+                <Navbar/>
                 <Container>
-                <Grid className="CampaignKeeper" style={{marginTop : '10px'}} columns={2}>
-                    <Grid.Row>
-                        <Grid.Column width={7}>
-                                <Image size='massive' src='https://placeholdit.co//i/500x580?bg=eeeeee' />
-                        </Grid.Column>
-                        <Grid.Column width={9}>
-                            <SimpleCard datas={datas}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+                    <Grid className="CampaignKeeper" style={{marginTop : '10px'}} columns={2}>
+                        <Grid.Row>
+                            <Grid.Column width={7}>
+                                <Image fluid label={{ as: 'a', corner: 'right', icon: 'heart outline',color : 'red' }} size='massive' src='https://placeholdit.co//i/500x580?bg=eeeeee' />
+                            </Grid.Column>
+                            <Grid.Column width={9}>
+                                <SimpleCard datas={datas}/>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </Container>
             </div>
         )
