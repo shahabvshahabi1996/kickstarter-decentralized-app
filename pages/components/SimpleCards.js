@@ -6,11 +6,11 @@ export default class SimpleCards extends Component{
         return(
 
         <Grid columns={3}>
-        {this.props.datas.map(data => {
+        {this.props.datas.map((data,index) => {
             return(
-            <Grid.Row style={{justifyContent : 'center',alignItems : 'center'}}>
+            <Grid.Row key={index} style={{justifyContent : 'center',alignItems : 'center'}}>
                 <Grid.Column width={4}>
-                    <Image  size='small' src='https://placeholdit.co//i/500x300?bg=eeeeee' />
+                    <Image fluid src='https://placeholdit.co//i/500x300?bg=eeeeee' />
                 </Grid.Column>
                 <Grid.Column width={10}>
                     <Card fluid style={{boxShadow : 'none'}}>
@@ -29,7 +29,7 @@ export default class SimpleCards extends Component{
                 </Grid.Column>
                 <Grid.Column textAlign='center' width={2}>
                     <Popup
-                    trigger={<a href="#"><Icon name='heart outline' color='red' size='large' /></a>}
+                    trigger={<a href="#"><Icon name='heart outline' color='black' size='large' /></a>}
                     content='Archive it'
                     position='top center'
                     />
