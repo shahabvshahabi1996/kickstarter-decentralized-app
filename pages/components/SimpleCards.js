@@ -29,7 +29,7 @@ export default class SimpleCards extends Component{
                 </Grid.Column>
                 <Grid.Column textAlign='center' width={2}>
                     <Popup
-                    trigger={<Icon name='heart outline' color='#eee' size='large' />}
+                    trigger={<a href="#"><Icon name='heart outline' color='red' size='large' /></a>}
                     content='Archive it'
                     position='top center'
                     />
