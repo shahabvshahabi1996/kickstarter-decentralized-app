@@ -10,8 +10,8 @@ export default class Cards extends Component{
                 <Grid.Row columns={3}>
                     {this.props.datas.map((data,index)=>{
                         return(
-                            <Grid.Column key={index} width={4} mobile={16} tablet={5} largeScreen={4} wideScreen={4} computer={4}>
-                                <Card style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.15)'}}>
+                            <Grid.Column key={index}>
+                                <Card fluid style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
                                     <div className="ui fluid image">
                                         <Image src='https://placeholdit.co//i/580x580?bg=eeeeee' />
                                         <div style={{position: 'absolute', top: '2%',left : '88%', width: '100%', height: 'auto'}}>
@@ -40,7 +40,9 @@ export default class Cards extends Component{
                                             <ProgressBar percent={data.budget}/>
                                         </Card.Description>
                                         <Card.Description>
-                                            <Button icon fluid labelPosition='right'>View Campaign <Icon name='right arrow' /></Button>
+                                        <Button fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
+                                            View Campaign
+                                        </Button>
                                         </Card.Description>
                                     </Card.Content>
                                 </Card>
