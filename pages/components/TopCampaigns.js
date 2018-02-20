@@ -15,7 +15,7 @@ export default class TopCampaigns extends Component {
                             <div className="ui fluid image">
                                 <Image fluid style={{marginBottom : '15px'}}  src='https://placeholdit.co//i/580x580?bg=eeeeee'/>
                                 <div style={{position: 'absolute', bottom: '15%',left : '5%', width: '100%', height: 'auto'}}>
-                                    <h4 style={{backgroundColor : "#ffff",padding : '5px',width : '50%'}}>{this.props.datas[0].name}</h4>
+                                    <h2 style={{backgroundColor : "#ffff",padding : '5px',width : '50%'}}>{this.props.datas[0].name}</h2>
                                     <p style={{backgroundColor : "#ffff",padding : '5px',width : '20%'}}>{this.props.datas[0].budget} funded</p>
                                 </div>
                                 <div style={{position: 'absolute', top: '2%',left : '92%', width: '100%', height: 'auto'}}>
