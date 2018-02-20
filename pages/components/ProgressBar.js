@@ -10,7 +10,7 @@ export default class ProgressBar extends Component {
   render() {
     return (
       <div>
-        <Progress size="tiny" percent={this.props.percent} indicating />
+        <Progress size="tiny" color="blue" percent={this.props.percent}  />
       </div>
     )
   }
