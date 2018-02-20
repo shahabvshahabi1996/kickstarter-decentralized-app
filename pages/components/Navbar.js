@@ -1,8 +1,15 @@
 import React , {Component} from "react";
-import { Button, Card, Grid , Divider , Menu , Input , Container , Image , Icon , Popup , Label } from 'semantic-ui-react';
+import { Button, Card, Grid , Divider , Menu , Input , Container , Image , Icon , Popup , Label , Dropdown } from 'semantic-ui-react';
 import Header from './Header';
 
 // import '../styles/App.css';
+
+const options = [
+  { key: 1, text: 'Choice 1', value: 1 },
+  { key: 2, text: 'Choice 2', value: 2 },
+  { key: 3, text: 'Choice 3', value: 3 },
+]
+
 
 export default class Navbar extends Component{
     state = {}
@@ -22,9 +29,23 @@ export default class Navbar extends Component{
             <h4>Explore</h4>
             </Menu.Item>
             <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
-              <h4>Start a project</h4>
+              <h4>Start a campaign</h4>
             </Menu.Item>
 
+            <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
+              
+            <Dropdown style={{fontWeight : 'bold'}} text='Categories' pointing className='link item'>
+              <Dropdown.Menu>
+                  <Dropdown.Header>Categories</Dropdown.Header>
+                  <Dropdown.Item>Home Goods</Dropdown.Item>
+                  <Dropdown.Item>Bedroom</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Header>Order</Dropdown.Header>
+                  <Dropdown.Item>Status</Dropdown.Item>
+                  <Dropdown.Item>Cancellations</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+            </Menu.Item>
             <Menu.Menu position='right'>
               <Menu.Item>
               <Popup
