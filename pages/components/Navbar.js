@@ -20,7 +20,7 @@ export default class Navbar extends Component{
       const { activeItem } = this.state
   
       return (
-          <Menu borderless stackable style={{padding : '5px',borderRadius : 0,marginTop:0,borderColor : '#eee',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.15)',borderWidth : 1,borderStyle : 'solid',padding : '0px'}}>
+          <Menu borderless stackable style={{padding : '5px',borderRadius : 0,marginTop:0,borderColor : '#eee',boxShadow: '0px 12px 8px 0px rgba(0,0,0,0.2)',borderWidth : 1,borderStyle : 'solid',padding : '0px'}}>
             <Header/>
             <Menu.Item>
               <h2>KickStarter</h2>
@@ -36,10 +36,8 @@ export default class Navbar extends Component{
               
             <Dropdown style={{fontWeight : 'bold'}} text='Categories' pointing className='link item'>
               <Dropdown.Menu>
-                  <Dropdown.Header>Categories</Dropdown.Header>
                   <Dropdown.Item>Home Goods</Dropdown.Item>
                   <Dropdown.Item>Bedroom</Dropdown.Item>
-                  <Dropdown.Divider />
                   <Dropdown.Header>Order</Dropdown.Header>
                   <Dropdown.Item>Status</Dropdown.Item>
                   <Dropdown.Item>Cancellations</Dropdown.Item>
