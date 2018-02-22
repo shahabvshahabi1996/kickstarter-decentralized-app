@@ -31,19 +31,6 @@ export default class Navbar extends Component{
             <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
               <h4>Start a campaign</h4>
             </Menu.Item>
-
-            <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
-              
-            <Dropdown style={{fontWeight : 'bold'}} text='Categories' pointing className='link item'>
-              <Dropdown.Menu>
-                  <Dropdown.Item>Home Goods</Dropdown.Item>
-                  <Dropdown.Item>Bedroom</Dropdown.Item>
-                  <Dropdown.Header>Order</Dropdown.Header>
-                  <Dropdown.Item>Status</Dropdown.Item>
-                  <Dropdown.Item>Cancellations</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
-            </Menu.Item>
             <Menu.Menu position='right'>
               <Menu.Item>
               <Popup
