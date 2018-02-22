@@ -37,6 +37,7 @@ export default class CampaignIndex extends Component {
         
         return {campaigns};
     }
+    
     render(){
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
