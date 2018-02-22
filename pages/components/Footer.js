@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import GridColumn, { Grid , Form , Button } from 'semantic-ui-react';
+import GridColumn, { Grid , Form , Button , Icon } from 'semantic-ui-react';
 import GridRow from 'semantic-ui-react';
 
 export default class Footer extends Component {
@@ -49,7 +49,12 @@ export default class Footer extends Component {
                         <Grid.Row>
                             <Grid.Column>
                                 <h3>Kickstarter © 2018</h3>
-                                <p>Our Socila NetWroks</p>
+                                <p>
+                                    <span><a href="#"><Icon name="facebook square" size="big" /></a></span>
+                                    <span><a href="#"><Icon name="instagram" size="big"  /></a></span>
+                                    <span><a href="#"><Icon name="pinterest" size="big"  /></a></span>
+                                    <span><a href="#"><Icon name="twitter square" size="big"  /></a></span>
+                                </p>
                             </Grid.Column>
                             <Grid.Column>
                                 <h3>Join Our NewsLetter</h3>
