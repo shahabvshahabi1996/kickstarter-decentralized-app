@@ -1,4 +1,4 @@
-import React , {Component} from "react";
+import React , {Component } from "react";
 import { Button, Grid , Divider , Container , Advertisement , Dropdown , Tab , Image , Icon , Popup , Label } from 'semantic-ui-react';
 import SimpleCard from './components/SimpleCards';
 import Navbar from './components/Navbar';
@@ -37,8 +37,10 @@ export default class CampaignIndex extends Component {
         
         return {campaigns};
     }
-    
+
     render(){
+        console.log(window.innerWidth);
+        console.log(window.outerWidth);
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
@@ -50,22 +52,10 @@ export default class CampaignIndex extends Component {
                                 padding : '2px',
                                 paddingLeft : '5px',
                                 paddingRight : '5px'}}>
-                                Top Campaigns of 
-                            </span>
-                            <span style={{ padding : '3.8px',
-                                paddingLeft : '6px',
-                                paddingRight : '6px',
-                                paddingBottom : '1.8px',
-                                paddingTop : '5.2px',
-                                backgroundColor : '#fff',
-                                borderRadius : 1.5,
-                                margin : '5px',
-                                fontSize : 25,
-                                boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                            <Category/>
+                                Top Campaigns
                             </span>
                             <span>
-                                <Button icon floated="right" style={{borderRadius : 2,
+                                <Button floated="right" icon style={{borderRadius : 2,
                                     boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} 
                                     labelPosition='right'>
                                     View All 
@@ -73,7 +63,24 @@ export default class CampaignIndex extends Component {
                                 </Button>
                             </span>
                         </h1>
+                        <h1>
+                            <span style={{ padding : '3.8px',
+                                paddingLeft : '6px',
+                                paddingRight : '6px',
+                                paddingBottom : '1.8px',
+                                paddingTop : '5.2px',
+                                backgroundColor : '#fff',
+                                borderRadius : 1.5,
+                                margin : '0px',
+                                fontSize : 25,
+                                boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
+                                <Category/>
+                            </span>
+                        </h1>
+                        <br/>
                         <Cards datas={datas}/>
+                        <br/>
+                        <br/>
                     </Container>
                 </div>
                 <div className="Recommended" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
@@ -82,19 +89,23 @@ export default class CampaignIndex extends Component {
                             <span style={{backgroundColor:'rgba(65,109,234,1)',padding : '2px' , paddingLeft : '5px' , paddingRight : '5px',color : '#fff'}}>
                             Recomended
                             </span>
-                            <span>
-                                <Button icon floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>
-                                View All <Icon name='right arrow' />
-                                </Button>
-                            </span>
+                        <span>
+                            <Button floated="right" icon style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>
+                            View All <Icon name='right arrow' />
+                            </Button>
+                        </span>
                         </h1>
+                        <br/><br/>
                         <Cards datas={datas}/>
+                        <br/><br/>
                     </Container>
                 </div>
                 <div className="Blog">
                     <Container style={{padding : '15px',margin: '10px'}}>
                         <h1 style={{color : '#252525'}}><span style={{backgroundColor : '#fff',borderRadius : 1.5,padding : '2px',paddingLeft : '5px',paddingRight : '5px'}}>Our Blog</span><span><Button icon floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>View All <Icon name='right arrow' /> </Button></span></h1>
+                        <br/><br/>
                         <BlogCards datas={datas}/>                        
+                        <br/><br/>            
                     </Container>
                 </div>
                 <div className="Footer" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
