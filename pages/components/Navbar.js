@@ -23,7 +23,7 @@ export default class Navbar extends Component{
           <Menu borderless stackable style={{padding : '5px',borderRadius : 0,marginTop:0,borderColor : '#eee',boxShadow: '0px 12px 8px 0px rgba(0,0,0,0.2)',borderWidth : 1,borderStyle : 'solid',padding : '0px'}}>
             <Header/>
             <Menu.Item>
-              <h2>KickStarter</h2>
+              <h2><a href="/" style={{color : '#252525',textDecoration : 'none'}}>KickStarter</a></h2>
             </Menu.Item>
             <Menu.Item name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
             <h4>Explore</h4>
