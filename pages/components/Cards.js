@@ -2,6 +2,7 @@ import React , {Component} from 'react';
 import { Button, Card, Grid , Divider , Container , Image , Icon , Popup } from 'semantic-ui-react';
 
 import ProgressBar from './ProgressBar';
+import LikeButton from './LikeButton';
 
 export default class Cards extends Component{
     render(){
@@ -14,13 +15,7 @@ export default class Cards extends Component{
                                 <Card fluid style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
                                     <div className="ui fluid image">
                                         <Image src='https://placeholdit.co//i/580x580?bg=eeeeee' />
-                                        <div style={{position: 'absolute', top: '2%',left : '88%', width: '100%', height: 'auto'}}>
-                                            <Popup
-                                            trigger={<a style={{color : '#252525'}} href="#"><Icon style={{backgroundColor : 'transparent'}} name='heart outline' size='large' /></a>}
-                                            content='Save it'
-                                            position='top center'
-                                            />
-                                        </div>
+                                        <LikeButton/>
                                     </div>
                                     <Card.Content>
                                         <Card.Header>

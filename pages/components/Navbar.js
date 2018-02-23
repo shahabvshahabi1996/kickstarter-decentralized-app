@@ -40,7 +40,7 @@ export default class Navbar extends Component{
                 on='focus'/>
               </Menu.Item>
               <Menu.Item name='help' active={activeItem === 'help'} onClick={this.handleItemClick}>
-                <h4>Sign In</h4>
+                <h4><a href="/login" style={{textDecoration : 'none',color : '#252525'}}>Sign In</a></h4>
               </Menu.Item>
             </Menu.Menu>
           </Menu>
