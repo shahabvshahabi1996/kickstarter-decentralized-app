@@ -5,7 +5,7 @@ export default class LoginForm extends Component{
     render(){
         return(
             <Form>
-                <h1>Login</h1>
+                <h1>Sign In</h1>
                 <hr/>
                 <Form.Field>
                     <label>Email</label>
