@@ -12,7 +12,7 @@ import factory from '../factory';
 
 const datas = [
     {
-        name : "fem -A Japan-made Multifunctional bag for Minimalists",
+        name : "Japan-made Multifunctional bag for Minimalists",
         budget : "87",
         description : "Lorem ipsum dolor sit amet, consectetuer adipiscing elit"
     },
@@ -39,8 +39,6 @@ export default class CampaignIndex extends Component {
     }
 
     render(){
-        console.log(window.innerWidth);
-        console.log(window.outerWidth);
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
