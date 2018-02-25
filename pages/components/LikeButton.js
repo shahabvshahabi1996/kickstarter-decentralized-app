@@ -14,7 +14,7 @@ export default class LikeButton extends Component{
     render(){
         if(this.state.active){
             return(
-            <div style={{position: 'absolute', top: '2%',left : '88%', width: '100%', height: 'auto'}}>
+            <div style={{position: 'absolute', top: '3.5%',left : '88%', width: '100%', height: 'auto'}}>
                 <Popup
                 trigger={<a onClick={this.clicked = this.clicked.bind(this)} style={{color : 'red'}}><Icon style={{backgroundColor : 'transparent'}} name='heart' color="red" size='large' /></a>}
                 content='Saved'
@@ -25,7 +25,7 @@ export default class LikeButton extends Component{
         }
         else
         return(
-            <div style={{position: 'absolute', top: '2%',left : '88%', width: '100%', height: 'auto'}}>
+            <div style={{position: 'absolute', top: '3.5%',left : '88%', width: '100%', height: 'auto'}}>
                 <Popup
                 trigger={<a onClick={this.clicked = this.clicked.bind(this)} style={{color : '#252525'}}><Icon style={{backgroundColor : 'transparent'}} name='heart outline' size='large' /></a>}
                 content='Save it'
