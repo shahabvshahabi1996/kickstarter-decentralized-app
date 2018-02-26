@@ -29,7 +29,7 @@ export default class Navbar extends Component{
             <h4>Explore</h4>
             </Menu.Item>
             <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
-              <h4>Start a campaign</h4>
+              <h4><a href="/campaigns/new" style={{color : '#252525',textDecoration : 'none'}}>Start a campaign</a></h4>
             </Menu.Item>
             <Menu.Menu position='right'>
               <Menu.Item>
