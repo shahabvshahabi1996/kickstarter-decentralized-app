@@ -60,7 +60,7 @@ export default class NewCampaginForm extends Component{
                 <Form>
                     <Form.Field>
                         <label>Campagin Name</label>
-                        <input value={this.state.text} placeholder='Campagin Name' />
+                        <input value={this.state.text} onChange={event => {this.setState({text : event.target.value})}} placeholder='Campagin Name' />
                     </Form.Field>
                     <Form.Field control={Select} label='Category' options={options} placeholder='Category' />
                     {/* <Button type='submit'>Submit</Button> */}
@@ -153,7 +153,7 @@ export default class NewCampaginForm extends Component{
                     </Form.Field>
                     <Form.Field>
                         <label>Your Minumum Contribution</label>
-                        <Input labelPosition='right' label='wei' placeholder='Minimum Donate Budget' />
+                        <Input labelPosition='right' label='ether' placeholder='Minimum Donate Budget' />
                     </Form.Field>
                     <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>Back</Button>                    
                     <Button onClick={()=>{alert('this form is Done!')}} floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',color : '#fff',backgroundColor : '#416DEA'}}>Done!</Button>
