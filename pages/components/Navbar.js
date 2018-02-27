@@ -25,10 +25,10 @@ export default class Navbar extends Component{
             <Menu.Item>
               <h2><a href="/" style={{color : '#252525',textDecoration : 'none'}}>KickStarter</a></h2>
             </Menu.Item>
-            <Menu.Item name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
+            <Menu.Item name='explore' active={activeItem === 'explore'} onClick={this.handleItemClick}>
             <h4>Explore</h4>
             </Menu.Item>
-            <Menu.Item name='submit' active={activeItem === 'submit'} onClick={this.handleItemClick}>
+            <Menu.Item name='newCampagin' active={activeItem === 'newCampagin'} onClick={this.handleItemClick}>
               <h4><a href="/campaigns/new" style={{color : '#252525',textDecoration : 'none'}}>Start a campaign</a></h4>
             </Menu.Item>
             <Menu.Menu position='right'>
