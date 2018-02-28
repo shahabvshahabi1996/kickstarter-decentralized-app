@@ -1,19 +1,65 @@
 pragma solidity ^0.4.17;
 
-
 contract CampaignFactory {
     address[] public deployedCampaigns;
     
-    function createCampaign(uint minumum) public {
-        address newCampaign = new Campaign(minumum, msg.sender);
+    struct CampaignStruct {
+        string campaginName;
+        string aboutCamapaign;
+        string category;
+        string author;
+        string image;
+        uint budget;
+        uint minumumContribution;
+        address manager;
+        address campaignAddress;
+    }
+    
+    CampaignStruct[] public campaigns;
+        
+    function createCampaign(uint minumum,
+    string Name,
+    string About,
+    string Category,
+    string Author,
+    string Image,
+    uint dreamyBudget)
+    public {
+        address newCampaign = new Campaign(
+            minumum,
+            msg.sender,
+            Name,
+            About,
+            Category,
+            Author,
+            Image,
+            dreamyBudget);
+        
+        CampaignStruct memory newCamp = CampaignStruct({
+            campaginName : Name,
+            aboutCamapaign : About,
+            category : Category,
+            author : Author,
+            image : Image,
+            budget : dreamyBudget,
+            minumumContribution : minumum,
+            manager : msg.sender,
+            campaignAddress : newCampaign
+        });
+        
+        campaigns.push(newCamp);
+        
         deployedCampaigns.push(newCampaign);
     }
     
     function getAllCampaigns() public view returns(address[]) {
         return deployedCampaigns;
     }
+    
+    function getCampaignLength() public view returns(uint){
+        return campaigns.length;
+    }
 }
-
 
 contract Campaign {
     
@@ -28,6 +74,14 @@ contract Campaign {
     
     Request[] public requests;
     
+    string public CampaginName;
+    string public AboutCamapaign;
+    string public Category;
+    string public Author;
+    string public Image;
+    uint public DreamyBudget;
+    
+    
     address public manager;
     
     uint public minumumContribution;
@@ -35,7 +89,9 @@ contract Campaign {
     uint public budget = 0;
     
     mapping (address => bool) public approvers;
-        
+    
+    
+    
     modifier isValidValue {
         require(msg.value >= minumumContribution);
         _;
@@ -51,13 +107,27 @@ contract Campaign {
         _;
     }
     
-    function Campaign(uint minumum, address creator) public {
+    function Campaign(
+    uint minumum,
+    address creator,
+    string Name,
+    string aboutCamapaign,
+    string category,
+    string author,
+    string image,
+    uint dreamyBudget) public {
         manager = creator;
         minumumContribution = minumum;
+        CampaginName = Name;
+        AboutCamapaign = aboutCamapaign;
+        Category = category;
+        Author = author;
+        Image = image;
+        DreamyBudget = dreamyBudget;
     }
     
     function contribute() isValidValue public payable {
-        if (approvers[msg.sender]) {
+        if(approvers[msg.sender]){
             approvers[msg.sender] = true;
             budget += msg.value;
         }else {
@@ -67,7 +137,7 @@ contract Campaign {
         }
     }
     
-    function createRequest(string description, uint value, address recipient) isManager public {
+    function createRequest(string description,uint value,address recipient) isManager public {
         Request memory newRequest = Request({
             description : description,
             value : value,
@@ -87,12 +157,13 @@ contract Campaign {
         
         request.approvalCounts++;
     }
-       
-    function finalizeRequest(uint index) isManager public payable {
+    
+    
+    function finalizeRequest(uint index) isManager public payable  {
         Request storage request = requests[index];
         
         require(!request.complete);
-        require(request.approvalCounts > (approversCount / 2));
+        require(request.approvalCounts > (approversCount / 2)  );
         
         request.recipient.transfer(request.value);
         request.complete = true;
