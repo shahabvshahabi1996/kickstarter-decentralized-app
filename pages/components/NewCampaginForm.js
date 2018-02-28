@@ -1,8 +1,7 @@
 import React , {Component} from 'react';
 import { Form , Label , Dimmer , Loader , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
 import Router from 'next/router';
-// import Web3 from 'web3';
-
+import factory from '../../factory';
 import web3 from '../../web3';
 
 const options = [
@@ -23,6 +22,8 @@ export default class NewCampaginForm extends Component{
             expectedBudget : '',
             walletAddress : '',
             minimumDonation : '',
+            author : 'Alireza Shahabi',
+            image : '',
             loading : false
          }
     }
@@ -33,6 +34,7 @@ export default class NewCampaginForm extends Component{
     }
 
     async increaseIndex() {
+        let account = await web3.eth.getAccounts();
         let newIndex = this.state.index;
         const {
             campaginName,
@@ -40,18 +42,19 @@ export default class NewCampaginForm extends Component{
             aboutCampaign,
             expectedBudget,
             walletAddress,
-            minimumDonation
+            minimumDonation,
+            author,
+            image
         } = this.state;
         if(newIndex == 0){
-            if(campaginName.length > 0 && category.length > 0 ){
+            if(campaginName.length > 0 && category.length > 0 && author.length > 0 ){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
             else alert('plz fill forms correctly');
         }
         else if(newIndex == 1){
-            console.log(expectedBudget , isNaN(expectedBudget));
-            if(aboutCampaign.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget)){
+            if(aboutCampaign.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget) && image.length > 0){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
@@ -60,11 +63,14 @@ export default class NewCampaginForm extends Component{
         else if(newIndex == 2){
             if(walletAddress && minimumDonation.length > 0 && !isNaN(minimumDonation)){
                 //fetch data and just redirect it to the home page
-                var that = this;
                 this.setState({loading : true});
-                setTimeout(()=>{
-                    Router.replace('http://localhost:3000/');
-                },15000);
+                let min = await web3.utils.toWei(minimumDonation,'ether');
+                await factory.methods.createCampaign(min)
+                .send({
+                    from : account[0]
+                })
+                this.setState({loading : false});
+                Router.replace('http://localhost:3000/');
             }
             else alert("plz fill forms correctly")
         }
@@ -112,6 +118,10 @@ export default class NewCampaginForm extends Component{
                 {/* <hr/> */}
                 <Divider/>
                 <Form>
+                    <Form.Field>
+                        <label>Author Name</label>
+                        <input disabled value={this.state.author}  placeholder='Campagin Name' />
+                    </Form.Field>
                     <Form.Field>
                         <label>Campagin Name</label>
                         <input value={this.state.campaginName} onChange={event => {this.setState({campaginName : event.target.value})}} placeholder='Campagin Name' />
@@ -164,6 +174,10 @@ export default class NewCampaginForm extends Component{
                         <Form.Field>
                             <label>Your Dreamy Budget for your Campagin</label>
                             <Input labelPosition="right" label='ether' value={this.state.expectedBudget} onChange={event => {this.setState({expectedBudget : event.target.value})}} placeholder='Exp 1000 ethers' />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Image of Your Project</label>
+                            <Input  value={this.state.image} onChange={event => {this.setState({image : event.target.value})}}/>
                         </Form.Field>
                         <Button onClick={this.increaseIndex = this.increaseIndex.bind(this)} floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',color : '#fff',backgroundColor : '#416DEA'}}>Next</Button>
                         <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2}}>Back</Button>

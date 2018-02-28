@@ -34,11 +34,11 @@ const datas = [
 export default class CampaignIndex extends Component {
     static async getInitialProps(){
         const campaigns = await factory.methods.getAllCampaigns().call();
-        
         return {campaigns};
     }
 
     render(){
+        console.log(this.props.campaigns)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
