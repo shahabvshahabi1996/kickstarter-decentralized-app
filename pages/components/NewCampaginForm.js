@@ -1,5 +1,6 @@
 import React , {Component} from 'react';
 import { Form , Label , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
+import Router from 'next/router';
 // import Web3 from 'web3';
 
 import web3 from '../../web3';
@@ -21,13 +22,13 @@ export default class NewCampaginForm extends Component{
             aboutCampaign : '',
             expectedBudget : '',
             walletAddress : '',
-            minimumDonation : ''
+            minimumDonation : '',
          }
     }
 
     async componentDidMount(){
-        let accounts = await web3.eth.getAccounts(); 
-        this.setState({walletAddress : accounts});
+        let account = await web3.eth.getAccounts(); 
+        this.setState({walletAddress : account});
     }
 
     increaseIndex() {
@@ -37,7 +38,8 @@ export default class NewCampaginForm extends Component{
             category,
             aboutCampaign,
             expectedBudget,
-            walletAddress
+            walletAddress,
+            minimumDonation
         } = this.state;
         if(newIndex == 0){
             if(campaginName.length > 0 && category.length > 0 ){
@@ -55,9 +57,10 @@ export default class NewCampaginForm extends Component{
             else alert('plz fill forms correctly');
         }
         else if(newIndex == 2){
-            
-            newIndex = newIndex + 1;
-            this.setState({index : newIndex})
+            if(walletAddress && minimumDonation.length > 0){
+                //fetch data and just redirect it to the home page
+            }
+            else alert("plz fill forms correctly")
         }
         else{
             return;
