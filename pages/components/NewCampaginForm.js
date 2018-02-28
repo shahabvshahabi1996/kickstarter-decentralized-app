@@ -32,19 +32,30 @@ export default class NewCampaginForm extends Component{
 
     increaseIndex() {
         let newIndex = this.state.index;
-        const {campaginName,category} = this.state;
+        const {
+            campaginName,
+            category,
+            aboutCampaign,
+            expectedBudget,
+            walletAddress
+        } = this.state;
         if(newIndex == 0){
             if(campaginName.length > 0 && category.length > 0 ){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
-            else alert('plz fill thease forms');
+            else alert('plz fill forms correctly');
         }
         else if(newIndex == 1){
-            newIndex = newIndex + 1;
-            this.setState({index : newIndex})
+            console.log(expectedBudget , isNaN(expectedBudget));
+            if(aboutCampaign.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget)){
+                newIndex = newIndex + 1;
+                this.setState({index : newIndex})
+            }
+            else alert('plz fill forms correctly');
         }
         else if(newIndex == 2){
+            
             newIndex = newIndex + 1;
             this.setState({index : newIndex})
         }
