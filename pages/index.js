@@ -33,12 +33,17 @@ const datas = [
 
 export default class CampaignIndex extends Component {
     static async getInitialProps(){
-        const campaigns = await factory.methods.getAllCampaigns().call();
-        return {campaigns};
+        let campaign = [] ;
+        const campaignsAddress = await factory.methods.getAllCampaigns().call();
+        let campaignCounter = await factory.methods.getCampaignLength().call();
+        for(let i = 0; i<campaignCounter;i++){
+            campaign.push(await factory.methods.campaigns(i).call());
+        }
+        return {campaignsAddress , campaign };
     }
 
     render(){
-        console.log(this.props.campaigns)
+        console.log(this.props)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
@@ -76,7 +81,7 @@ export default class CampaignIndex extends Component {
                             </span>
                         </h1>
                         <br/>
-                        <Cards datas={datas}/>
+                        <Cards datas={this.props.campaign}/>
                         <br/>
                         <br/>
                     </Container>
