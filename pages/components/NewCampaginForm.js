@@ -14,7 +14,15 @@ export default class NewCampaginForm extends Component{
 
     constructor(){
         super();
-        this.state = { index : 0 , campaginName : '', category : '',aboutCampaign : '',expectedBudget : '',walletAddress : '',minimumDonation : '' }
+        this.state = { 
+            index : 0 , 
+            campaginName : '',
+            category : '',
+            aboutCampaign : '',
+            expectedBudget : '',
+            walletAddress : '',
+            minimumDonation : ''
+         }
     }
 
     async componentDidMount(){
@@ -24,8 +32,26 @@ export default class NewCampaginForm extends Component{
 
     increaseIndex() {
         let newIndex = this.state.index;
-        newIndex = newIndex + 1;
-        this.setState({index : newIndex})
+        const {campaginName,category} = this.state;
+        if(newIndex == 0){
+            if(campaginName.length > 0 && category.length > 0 ){
+                newIndex = newIndex + 1;
+                this.setState({index : newIndex})
+            }
+            else alert('plz fill thease forms');
+        }
+        else if(newIndex == 1){
+            newIndex = newIndex + 1;
+            this.setState({index : newIndex})
+        }
+        else if(newIndex == 2){
+            newIndex = newIndex + 1;
+            this.setState({index : newIndex})
+        }
+        else{
+            return;
+        }
+        
         // console.log(this.state.index);
     }
 
@@ -120,7 +146,7 @@ export default class NewCampaginForm extends Component{
                             <Input labelPosition="right" label='ether' value={this.state.expectedBudget} onChange={event => {this.setState({expectedBudget : event.target.value})}} placeholder='Exp 1000 ethers' />
                         </Form.Field>
                         <Button onClick={this.increaseIndex = this.increaseIndex.bind(this)} floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',color : '#fff',backgroundColor : '#416DEA'}}>Next</Button>
-                        <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>Back</Button>
+                        <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2}}>Back</Button>
                         <br/><br/>
                     </Form>
                 </div>
@@ -166,8 +192,8 @@ export default class NewCampaginForm extends Component{
                         <label>Your Minumum Contribution</label>
                         <Input labelPosition='right' value={this.state.minimumDonation} onChange={event => {this.setState({minimumDonation : event.target.value})}} label='ether' placeholder='Minimum Donate Budget' />
                     </Form.Field>
-                    <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>Back</Button>                    
-                    <Button onClick={()=>{alert('this form is Done!')}} floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',color : '#fff',backgroundColor : '#416DEA'}}>Done!</Button>
+                    <Button onClick={this.decreaseIndex = this.decreaseIndex.bind(this)} floated="left" style={{borderRadius : 2}}>Back</Button>                    
+                    <Button onClick={this.increaseIndex = this.increaseIndex.bind(this)} floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',color : '#fff',backgroundColor : '#416DEA'}}>Done!</Button>
                     <br/><br/>
                 </Form>
                 </div>
