@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import { Form , Label , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
+import { Form , Label , Dimmer , Loader , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
 import Router from 'next/router';
 // import Web3 from 'web3';
 
@@ -23,6 +23,7 @@ export default class NewCampaginForm extends Component{
             expectedBudget : '',
             walletAddress : '',
             minimumDonation : '',
+            loading : false
          }
     }
 
@@ -31,7 +32,7 @@ export default class NewCampaginForm extends Component{
         this.setState({walletAddress : account});
     }
 
-    increaseIndex() {
+    async increaseIndex() {
         let newIndex = this.state.index;
         const {
             campaginName,
@@ -57,8 +58,13 @@ export default class NewCampaginForm extends Component{
             else alert('plz fill forms correctly');
         }
         else if(newIndex == 2){
-            if(walletAddress && minimumDonation.length > 0){
+            if(walletAddress && minimumDonation.length > 0 && !isNaN(minimumDonation)){
                 //fetch data and just redirect it to the home page
+                var that = this;
+                this.setState({loading : true});
+                setTimeout(()=>{
+                    Router.replace('http://localhost:3000/');
+                },15000);
             }
             else alert("plz fill forms correctly")
         }
@@ -170,7 +176,12 @@ export default class NewCampaginForm extends Component{
 
         if(this.state.index == 2){
             return(
-                <div>
+            <div>
+                <Dimmer active={this.state.loading} style={{backgroundColor : 'rgba(65,109,234,0.5)'}} inverted>
+                    <Dimmer active={this.state.loading} inverted>
+                        <Loader size="huge" indeterminate>Plz Wait About 15 - 20 Seconds to Transaction will be compelete</Loader>
+                    </Dimmer>    
+                </Dimmer>
                 <Step.Group style={{borderRadius : 1.5}} fluid ordered stackable='tablet'>
                     <Step completed>
                     {/* <Icon name='truck' /> */}
