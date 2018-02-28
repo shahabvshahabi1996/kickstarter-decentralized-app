@@ -5,8 +5,8 @@ import factory from '../../factory';
 import web3 from '../../web3';
 
 const options = [
-  { key: 'm', text: 'Arts', value: 'arts' },
-  { key: 'f', text: 'Design & Tech', value: 'design' },
+  { key: 'm', text: 'Arts', value: 'Arts' },
+  { key: 'f', text: 'Design & Tech', value: 'Design & Tech' },
 ]
 
 
@@ -65,7 +65,9 @@ export default class NewCampaginForm extends Component{
                 //fetch data and just redirect it to the home page
                 this.setState({loading : true});
                 let min = await web3.utils.toWei(minimumDonation,'ether');
-                await factory.methods.createCampaign(min)
+                let expect = await web3.utils.toWei(expectedBudget,'ether');
+
+                await factory.methods.createCampaign(min,campaginName,aboutCampaign,category,author,image,expect)
                 .send({
                     from : account[0]
                 })
