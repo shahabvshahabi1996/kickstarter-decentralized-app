@@ -11,7 +11,8 @@ export default class Cards extends Component{
     constructor(){
         super();
         this.state = {
-            datas : undefined
+            datas : undefined,
+            category : ''
         }
     }
 
@@ -25,7 +26,12 @@ export default class Cards extends Component{
         return(
             <Grid stackable>
                 <Grid.Row columns={3}>
-                    {datas.map((data,index)=>{
+                    {datas.filter((data)=>{
+                        if(this.state.category.length > 0)
+                            return data.category == this.state.category;
+                        else
+                            return data  
+                    }).map((data,index)=>{
                         return(
                             <Grid.Column key={index}>
                                 <Card fluid style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
