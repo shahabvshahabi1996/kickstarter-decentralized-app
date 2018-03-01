@@ -16,10 +16,10 @@ beforeEach(async()=>{
     accounts = await web3.eth.getAccounts();
     factory = await new web3.eth.Contract(JSON.parse(CampaignFactory.interface))
     .deploy({data : CampaignFactory.bytecode})
-    .send({from : accounts[0],gas : '1000000'});
+    .send({from : accounts[0],gas : '3000000'});
 
-    await factory.methods.createCampaign('100')
-    .send({from : accounts[0],gas : '1000000'});
+    await factory.methods.createCampaign('100','new projetc','about','category','alireza','asdansdasndk','100000')
+    .send({from : accounts[0],gas : '3000000'});
 
     [campaignAddress] = await factory.methods.getAllCampaigns().call();
 
