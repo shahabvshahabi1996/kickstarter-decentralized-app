@@ -36,13 +36,21 @@ export default class CampaignIndex extends Component {
         let campaign = [] ;
         const campaignsAddress = await factory.methods.getAllCampaigns().call();
         let campaignCounter = await factory.methods.getCampaignLength().call();
-        for(let i = 0; i<campaignCounter;i++){
+        for(let i = campaignCounter - 1; i >= 0 ;i--){
             campaign.push(await factory.methods.campaigns(i).call());
         }
         return {campaignsAddress , campaign };
     }
 
+    constructor(){
+        super();
+        this.state = {
+            category : ''
+        }
+    }
+
     render(){
+        console.log(this.state);
         console.log(this.props)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
@@ -77,7 +85,7 @@ export default class CampaignIndex extends Component {
                                 margin : '0px',
                                 fontSize : 25,
                                 boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                                <Category/>
+                                <Category selected={(cat)=>{this.setState({category : cat})}}/>
                             </span>
                         </h1>
                         <br/>
