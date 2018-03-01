@@ -1,12 +1,18 @@
 import React , {Component} from 'react';
 import {Popup , Icon} from 'semantic-ui-react';
+import web3 from '../../web3';
 
 export default class LikeButton extends Component{
     constructor(){
         super();
         this.state = {
-            active : 0
+            active : 0,
+            accounts : []
         }
+    }
+    async componentDidMount(){
+        let accounts = await web3.eth.getAccounts();
+        this.setState({accounts});
     }
     clicked(){
         this.setState({active : !this.state.active});
