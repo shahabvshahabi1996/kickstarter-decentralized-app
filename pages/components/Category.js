@@ -3,18 +3,31 @@ import { Dropdown } from 'semantic-ui-react';
 
 
 export default class Category extends Component{
+
+    constructor(){
+        super();
+        this.state = {
+            cat : 'Categories'
+        }
+    }
+
+    selectCat(event , {text}){
+        this.props.selected(text);
+        this.setState({cat : text});
+    }
+
     render(){
         return(
-            <Dropdown text='Design & Tech' floating>
+            <Dropdown text={this.state.cat} floating>
                 <Dropdown.Menu fluid>
-                    <Dropdown.Item text='Arts' />
-                    <Dropdown.Item text='Games' />
-                    <Dropdown.Item text='Food & Craft' />
-                    <Dropdown.Item text='Publishing' />
-                    <Dropdown.Item text='Comics & Illustration' />
-                    <Dropdown.Item text='Music'  />
-                    <Dropdown.Item text='Design & Tech' />
-                    <Dropdown.Item text='Film' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Arts' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Games' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Food & Craft' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Publishing' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Comics & Illustration' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Music'  />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Design & Tech' />
+                    <Dropdown.Item onClick={this.selectCat = this.selectCat.bind(this)} text='Film' />
                 </Dropdown.Menu>
             </Dropdown>
         )
