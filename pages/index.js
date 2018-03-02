@@ -94,7 +94,7 @@ export default class CampaignIndex extends Component {
                         <br/>
                     </Container>
                 </div>
-                <div className="Recommended" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
+                {/* <div className="Recommended" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
                     <Container style={{margin : '10px'}}>
                         <h1>
                             <span style={{backgroundColor:'rgba(65,109,234,1)',padding : '2px' , paddingLeft : '5px' , paddingRight : '5px',color : '#fff'}}>
@@ -110,10 +110,10 @@ export default class CampaignIndex extends Component {
                         <Cards datas={datas}/>
                         <br/><br/>
                     </Container>
-                </div>
-                <div className="Blog">
+                </div> */}
+                <div className="Blog"  style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
                     <Container style={{padding : '15px',margin: '10px'}}>
-                        <h1 style={{color : '#252525'}}><span style={{backgroundColor : '#fff',borderRadius : 1.5,padding : '2px',paddingLeft : '5px',paddingRight : '5px'}}>Our Blog</span><span><Button icon floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>View All <Icon name='right arrow' /> </Button></span></h1>
+                        <h1 style={{color : '#fffff'}}><span style={{backgroundColor:'rgba(65,109,234,1)',padding : '2px' , paddingLeft : '5px' , paddingRight : '5px',color : '#fff'}}>Our Blog</span><span><Button icon floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>View All <Icon name='right arrow' /> </Button></span></h1>
                         <br/><br/>
                         <BlogCards datas={datas}/>                        
                         <br/><br/>            
