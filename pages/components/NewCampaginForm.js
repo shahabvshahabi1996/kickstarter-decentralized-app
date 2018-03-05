@@ -1,9 +1,8 @@
 import React , {Component} from 'react';
-import { Form , Label , Dimmer , Loader , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
-import Router from 'next/router';
+import { Form , Label , Dimmer , Message , Loader , Grid , Button , Step , Input , Icon , Divider ,Select ,Checkbox ,TextArea} from 'semantic-ui-react';
 import factory from '../../factory';
 import web3 from '../../web3';
-
+import {Router} from '../../routes';
 const options = [
   { key: 'm', text: 'Arts', value: 'Arts' },
   { key: 'f', text: 'Design & Tech', value: 'Design & Tech' },
@@ -22,15 +21,16 @@ export default class NewCampaginForm extends Component{
             expectedBudget : '',
             walletAddress : '',
             minimumDonation : '',
-            author : 'Alireza Shahabi',
+            author : '',
             image : '',
+            errorMessage : [],
             loading : false
          }
     }
 
     async componentDidMount(){
         let account = await web3.eth.getAccounts(); 
-        this.setState({walletAddress : account});
+        this.setState({walletAddress : account,author : 'Alireza Shahabi'});
     }
 
     async increaseIndex() {
@@ -46,41 +46,69 @@ export default class NewCampaginForm extends Component{
             author,
             image
         } = this.state;
+        this.setState({errorMessage : []})
         if(newIndex == 0){
             if(campaginName.length > 0 && category.length > 0 && author.length > 0 ){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
-            else alert('plz fill forms correctly');
+            else {
+                let errors = [];
+                if(!campaginName.length > 0)
+                errors.push('plz enter a campaign name');
+                if(!category.length > 0)
+                errors.push('plz choose a category for your project');
+
+                this.setState({errorMessage : errors});
+            }
         }
         else if(newIndex == 1){
             if(aboutCampaign.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget) && image.length > 0){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
-            else alert('plz fill forms correctly');
+            else {
+                let errors = [];
+                if(!aboutCampaign.length > 0)
+                    errors.push('plz enter somthing about your campaign');
+                if(!expectedBudget.length > 0)
+                    errors.push('plz enter your dreamy budget');
+                if(!image.length > 0)
+                    errors.push('plz enter an image url');          
+
+                this.setState({errorMessage : errors});
+            }
         }
         else if(newIndex == 2){
+            let errors = [];
             if(walletAddress && minimumDonation.length > 0 && !isNaN(minimumDonation)){
                 //fetch data and just redirect it to the home page
-                this.setState({loading : true});
-                let min = await web3.utils.toWei(minimumDonation,'ether');
-                let expect = await web3.utils.toWei(expectedBudget,'ether');
+                try {
+                    this.setState({loading : true});
+                    let min = await web3.utils.toWei(minimumDonation,'ether');
+                    let expect = await web3.utils.toWei(expectedBudget,'ether');
 
-                await factory.methods.createCampaign(min,campaginName,aboutCampaign,category,author,image,expect)
-                .send({
-                    from : account[0]
-                })
+                    await factory.methods.createCampaign(min,campaginName,aboutCampaign,category,author,image,expect)
+                    .send({
+                        from : account[0]
+                    })
+                    this.setState({loading : false});                    
+                    Router.push('/');
+                    
+                } catch(err){
+                    errors.push(err.message.slice(0,80) + '.');
+                    this.setState({errorMessage : errors});
+                }
                 this.setState({loading : false});
-                Router.replace('http://localhost:3000/');
             }
-            else alert("plz fill forms correctly")
+            else {
+                errors.push('plz enter a minimum donation amount');
+                this.setState({errorMessage : errors});
+            }
         }
         else{
             return;
         }
-        
-        // console.log(this.state.index);
     }
 
     decreaseIndex(){
@@ -119,7 +147,12 @@ export default class NewCampaginForm extends Component{
                 <h2>General information</h2>
                 {/* <hr/> */}
                 <Divider/>
-                <Form>
+                {this.state.errorMessage.length > 0 ? <Message
+                    error
+                    header='There was some errors with your submission'
+                    list={this.state.errorMessage}
+                /> : <div></div> }
+                <Form error>
                     <Form.Field>
                         <label>Author Name</label>
                         <input disabled value={this.state.author}  placeholder='Campagin Name' />
@@ -168,6 +201,11 @@ export default class NewCampaginForm extends Component{
                     <h2>About Campagin</h2>
                     {/* <hr/> */}
                     <Divider/>
+                    {this.state.errorMessage.length > 0 ? <Message
+                    error
+                    header='There was some errors with your submission'
+                    list={this.state.errorMessage}
+                /> : <div></div> }
                     <Form>
                         <Form.Field>
                             <label>Write Any Thing You Want about your Campaign</label>
@@ -224,6 +262,11 @@ export default class NewCampaginForm extends Component{
                 <h2>Submit Your Campagin</h2>
                 {/* <hr/> */}
                 <Divider/>
+                {this.state.errorMessage.length > 0 ? <Message
+                    error
+                    header='There was some errors with your submission'
+                    list={this.state.errorMessage}
+                /> : <div></div> }
                 <Form>
                     <Form.Field>
                         <label>Your Wallet Address</label>
