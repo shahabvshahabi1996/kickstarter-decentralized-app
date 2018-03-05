@@ -10,7 +10,7 @@
     "test": "mocha",
     "compile": "node compile.js",
     "deploy": "node deploy.js",
-    "dev": "next dev"
+    "dev": "node server.js"
   },
   "author": "Alireza Shahabi",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "ganache-cli": "^6.0.3",
     "mocha": "^5.0.0",
     "next": "^4.1.4",
+    "next-routes": "^1.3.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "semantic-ui-css": "^2.2.14",
