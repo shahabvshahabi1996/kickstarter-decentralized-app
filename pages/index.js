@@ -50,8 +50,6 @@ export default class CampaignIndex extends Component {
     }
 
     render(){
-        console.log(this.state);
-        console.log(this.props)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
