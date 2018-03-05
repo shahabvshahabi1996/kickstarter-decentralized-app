@@ -4,6 +4,7 @@ import { Button, Card, Grid , Divider , Container , Image , Icon , Popup } from 
 import ProgressBar from './ProgressBar';
 import LikeButton from './LikeButton';
 
+import {Link} from '../../routes';
 import web3 from '../../web3';
 
 export default class Cards extends Component{
@@ -36,7 +37,10 @@ export default class Cards extends Component{
                             <Grid.Column key={index}>
                                 <Card fluid style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
                                     <div className="ui fluid image">
-                                        <Image style={{width : '100%',height : '300px'}} src={data.image} />
+                                        {data.image.length > 0 ? 
+                                        <Image style={{width : '100%',height : '300px'}} src={data.image} /> : 
+                                        <Image style={{width : '100%',height : '300px'}} src='https://placeholdit.co//i/580x580?bg=eeeeee' />  }
+                                        
                                         {/* 'https://placeholdit.co//i/580x580?bg=eeeeee' */}
                                         <LikeButton link={data.campaignAddress}/>
                                     </div>
@@ -60,9 +64,22 @@ export default class Cards extends Component{
                                         </Card.Description>
                                         <Divider/>
                                         <Card.Description>
-                                        <Button onClick={()=>{alert(data.campaignAddress)}} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
-                                            View Campaign
-                                        </Button>
+                                        <Link route={`/campaigns/show/${data.campaignAddress}`}>
+                                            <a className="item" style={{
+                                                borderRadius : 2,
+                                                color : '#fff',
+                                                backgroundColor : '#416DEA',
+                                                border : 'none',
+                                                boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)',
+                                                padding : '12px',
+                                                width : '100%',
+                                                display : 'block',
+                                                textAlign : 'center',
+                                                fontSize : 15,
+                                                fontWeight : 'bold'}}>
+                                                View Campaign
+                                            </a>
+                                        </Link>
                                         </Card.Description>
                                     </Card.Content>
                                 </Card>
