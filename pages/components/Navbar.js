@@ -1,15 +1,14 @@
 import React , {Component} from "react";
 import { Button, Card, Grid , Divider , Menu , Input , Container , Image , Icon , Popup , Label , Dropdown } from 'semantic-ui-react';
 import Header from './Header';
-import Router from 'next/router'
+import {Router} from '../../routes';
 // import '../styles/App.css';
 
 export default class Navbar extends Component{
     state = {}
 
     handleItemClick = (e, { name }) => {
-      console.log(name);
-      Router.replace(`http://localhost:3000${name}`);
+      Router.replace(`${name}`);
       this.setState({ activeItem: name });
     }
   
