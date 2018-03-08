@@ -17,7 +17,7 @@ const deploy = async()=>{
    const accounts =  await web3.eth.getAccounts();
    const result = await new web3.eth.Contract(JSON.parse(CampaignFactory.interface))
    .deploy({data : CampaignFactory.bytecode})
-   .send({from : accounts[0],gas : '1000000'});
+   .send({from : accounts[0],gas : '3000000'});
 
     const data = {
        "address" : result.options.address
