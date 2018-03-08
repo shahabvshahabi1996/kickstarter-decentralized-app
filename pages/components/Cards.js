@@ -19,10 +19,12 @@ export default class Cards extends Component{
 
     async componentDidMount(){
         await this.setState({datas : this.props.datas})
+
     }
 
     render(){
         var {datas} = this.state;
+        console.log(datas);
         if(datas != undefined)
         return(
             <Grid stackable>
@@ -33,14 +35,15 @@ export default class Cards extends Component{
                         else
                             return data  
                     }).map((data,index)=>{
+                        console.log(data.image)
                         return(
                             <Grid.Column key={index}>
                                 <Card fluid style={{marginTop : '10px',marginBottom : '10px',borderRadius : 1 ,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
                                     <div className="ui fluid image">
-                                        {data.image.length > 0 ? 
+                                        {/* {data.image.length > 0 ? 
                                         <Image style={{width : '100%',height : '300px'}} src={data.image} /> : 
-                                        <Image style={{width : '100%',height : '300px'}} src='https://placeholdit.co//i/580x580?bg=eeeeee' />  }
-                                        
+                                        <Image style={{width : '100%',height : '300px'}} src='https://placeholdit.co//i/580x580?bg=eeeeee' />  } */}
+                                        <Image style={{width : '100%',height : '300px'}} src={ "http://" +  data.image} />
                                         {/* 'https://placeholdit.co//i/580x580?bg=eeeeee' */}
                                         <LikeButton link={data.campaignAddress}/>
                                     </div>
