@@ -6,11 +6,13 @@ const buildPath = path.resolve(__dirname,'build');
 fs.removeSync(buildPath);
 
 const contractPath = path.resolve(__dirname,'contracts','Campaign.sol');
+console.log(contractPath);
 const contractFile = fs.readFileSync(contractPath,'utf-8');
+console.log(contractFile);
 
 const outPut = solc.compile(contractFile,1).contracts;
 
-// console.log(outPut);
+console.log(outPut);
 
 fs.ensureDirSync(buildPath);
 for(let contract in outPut) {
