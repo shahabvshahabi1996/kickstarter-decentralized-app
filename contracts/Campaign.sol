@@ -169,8 +169,8 @@ contract Campaign {
         request.complete = true;
     }
     
-    function getSummary() public view returns(uint, uint, uint, uint, address ){
-        return ( minumumContribution, DreamyBudget, this.balance, approversCount, manager);
+    function getSummary() public view returns(uint, uint, uint, uint, address, string, string, string, string, string) {
+        return ( minumumContribution, DreamyBudget, this.balance, approversCount, manager, CampaginName, Author, Image, AboutCamapaign, Category);
     }
 
     function getRequestsLength() public view returns(uint) {
