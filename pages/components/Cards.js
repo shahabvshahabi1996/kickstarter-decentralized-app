@@ -43,7 +43,7 @@ export default class Cards extends Component{
                                         {/* {data.image.length > 0 ? 
                                         <Image style={{width : '100%',height : '300px'}} src={data.image} /> : 
                                         <Image style={{width : '100%',height : '300px'}} src='https://placeholdit.co//i/580x580?bg=eeeeee' />  } */}
-                                        <Image style={{width : '100%',height : '300px'}} src={ "http://" +  data.image} />
+                                        <Image style={{width : '100%',height : '300px'}} src={data.image} />
                                         {/* 'https://placeholdit.co//i/580x580?bg=eeeeee' */}
                                         <LikeButton link={data.campaignAddress}/>
                                     </div>
