@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import {Link} from '../../routes';
 import Campaign from '../../campaign';
+import web3 from '../../web3';
 import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
 
 export default class Show extends Component{
@@ -18,7 +19,26 @@ export default class Show extends Component{
         console.log(props.query.address)
         const campagin = Campaign(props.query.address);
         const summary = await campagin.methods.getSummary().call();
-        return { minimumContribution : summary[0],dreamyBudget : summary[1],amountRaised : summary[2],manager : summary[4],approversCount : summary[3] };
+        console.log(summary);
+        /*
+        '5': 'New Project',
+        '6': 'Alireza Shahabi',
+        '7': 'https://goo.gl/hRYRXG',
+        '8': '# THis is Our new Camapgin\n### we want to get money from it so...\n##### plz help us and contribut on our project \n\n\nthanks \n#### Alireza Shahabi',
+        '9': 'Design & Tech'
+         */
+        return { 
+            minimumContribution : summary[0],
+            dreamyBudget : summary[1],
+            amountRaised : summary[2],
+            manager : summary[4],
+            approversCount : summary[3],
+            campaignName : summary[5],
+            author : summary[6],
+            image : summary[7],
+            aboutCampaign : summary[8],
+            category : summary[9]
+         };
     }
 
     render(){
@@ -32,7 +52,7 @@ export default class Show extends Component{
                                 <Grid.Column width={16}>
                                     <h1 style={{fontSize : 35}}>
                                     <span style={{backgroundColor : '#fff',padding : '5px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                                        Skalpel | The world's most stylish steak knife
+                                        {this.props.campaignName}
                                     </span>
                                     </h1>
                                     <h4 style={{color : '#252525'}}>
@@ -45,7 +65,7 @@ export default class Show extends Component{
                                             <span style={{backgroundColor : '#fff',padding : '15px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.1)'}}>
                                                 <Image src='https://placeholdit.co//i/580x580?bg=eeeeee' avatar size="mini"/>
                                                 <span style={{marginLeft : '5px'}}>
-                                                    <span style={{fontWeight : 'bold',fontSize : 15}}>Alireza Shahabi</span>
+                                                    <span style={{fontWeight : 'bold',fontSize : 15}}>{this.props.author}</span>
                                                 </span>
                                             </span>
                                             <br/>
@@ -59,7 +79,7 @@ export default class Show extends Component{
                                 <Grid.Row columns={2}>
                                     <Grid.Column width={9}>
                                         <div style={{textAlign : 'center',margin : 0}}>
-                                            <Image centered size="massive" src="https://goo.gl/hRYRXG" />
+                                            <Image centered size="massive" src={this.props.image} />
                                         </div>
                                     </Grid.Column>
                                     <Grid.Column width={7}>
@@ -67,8 +87,8 @@ export default class Show extends Component{
                                         <Card.Content>
                                             <div>
                                                 <Progress style={{borderRadius : 1.5,marginBottom : '15px'}} color="blue" size="tiny" percent={(this.props.amountRaised / this.props.dreamyBudget) * 100} />
-                                                <span style={{fontSize : 30,color : 'rgba(65,109,234,0.9)'}}>{this.props.amountRaised} ETH</span><br/>
-                                                <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>pledged of <span>{this.props.dreamyBudget} ETH</span> goal</span>
+                                                <span style={{fontSize : 30,color : 'rgba(65,109,234,0.9)'}}>{web3.utils.fromWei(this.props.amountRaised,'ether')} ETH</span><br/>
+                                                <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>pledged of <span>{web3.utils.fromWei(this.props.dreamyBudget,'ether')} ETH</span> goal</span>
                                             </div>
                                             <br/>
                                             <div>
@@ -82,7 +102,7 @@ export default class Show extends Component{
                                             </div>
                                             <br/>
                                             <Card.Description>
-                                                <Input fluid labelPosition='left' placeholder={`${this.props.minimumContribution}`} action>
+                                                <Input fluid labelPosition='left' placeholder={`${web3.utils.fromWei(this.props.minimumContribution,'ether')}`} action>
                                                     <Label>ETH</Label>
                                                     <input />
                                                     <Button style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
@@ -109,7 +129,7 @@ export default class Show extends Component{
                                                                         textAlign : 'center',
                                                                         fontSize : 15,
                                                                         fontWeight : '600'}}>
-                                                                        Donate {this.props.minimumContribution} ETH
+                                                                        Donate {web3.utils.fromWei(this.props.minimumContribution,'ether')} ETH
                                                                     </a>
                                                                 </Link>
                                                             </Grid.Column>
@@ -122,7 +142,7 @@ export default class Show extends Component{
                                                         <Grid.Column>
                                                             <span style={{backgroundColor : '#eee',padding : '5px',margin : '5px'}}>
                                                                 <Icon name="tag" />
-                                                                Music - Rock
+                                                                {this.props.category}
                                                             </span>
                                                             <span style={{backgroundColor : '#eee',padding : '5px',margin : '5px'}}>
                                                                 <Icon name="location arrow" />
@@ -146,7 +166,7 @@ export default class Show extends Component{
                         <Grid stackable>
                             <Grid.Row columns={1}>
                                 <Grid.Column>
-                                    <div dangerouslySetInnerHTML={{__html : marked(this.state.markdown)}}>
+                                    <div dangerouslySetInnerHTML={{__html : marked(this.props.aboutCampaign)}}>
                                     </div> 
                                 </Grid.Column>
                             </Grid.Row>
