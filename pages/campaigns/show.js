@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import marked from 'marked';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import {Link} from '../../routes';
+import {Link , Router} from '../../routes';
 import Campaign from '../../campaign';
 import web3 from '../../web3';
 import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
@@ -11,23 +11,51 @@ export default class Show extends Component{
     constructor(){
         super();
         this.state = {
-            markdown : "# this is a Description of the Campagin \n ### this is what we need"
+            loading : false,
+            inputValue : '',
+            loadingInput : false
+        }
+    }
+
+    async DonationButton(amount){
+        this.setState({loading : true});
+        console.log(this.props.address)
+        const campagin = await Campaign(this.props.address);
+        let Amount = await web3.utils.toWei(amount,'ether');
+        let accounts = await web3.eth.getAccounts();
+        await campagin.methods.contribute().send({
+            from : accounts[0],
+            value : Amount
+        });
+        this.setState({loading : false});
+        Router.push(`/campaigns/show/${this.props.address}`)
+
+    }
+
+    async DonationInput(amount){
+        console.log(amount);
+        let Amount = await web3.utils.toWei(amount,'ether');
+        if(Amount < this.props.minimumContribution){
+            alert("plz enter a value more than minimin contribution!!!");
+
+        }
+        else{
+            const campagin = await Campaign(this.props.address);
+            let accounts = await web3.eth.getAccounts();
+            await campagin.methods.contribute().send({
+                from : accounts[0],
+                value : Amount
+            });
+            this.setState({loadingInput : true});
+            Router.push(`/campaigns/show/${this.props.address}`)
         }
     }
 
     static async  getInitialProps(props){
-        console.log(props.query.address)
         const campagin = Campaign(props.query.address);
         const summary = await campagin.methods.getSummary().call();
-        console.log(summary);
-        /*
-        '5': 'New Project',
-        '6': 'Alireza Shahabi',
-        '7': 'https://goo.gl/hRYRXG',
-        '8': '# THis is Our new Camapgin\n### we want to get money from it so...\n##### plz help us and contribut on our project \n\n\nthanks \n#### Alireza Shahabi',
-        '9': 'Design & Tech'
-         */
         return { 
+            address : props.query.address,
             minimumContribution : summary[0],
             dreamyBudget : summary[1],
             amountRaised : summary[2],
@@ -102,10 +130,10 @@ export default class Show extends Component{
                                             </div>
                                             <br/>
                                             <Card.Description>
-                                                <Input fluid labelPosition='left' placeholder={`${web3.utils.fromWei(this.props.minimumContribution,'ether')}`} action>
+                                                <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(this.props.minimumContribution,'ether')}`} action>
                                                     <Label>ETH</Label>
-                                                    <input />
-                                                    <Button style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
+                                                    <input disabled={this.state.loadingInput} value={this.state.inputValue} />
+                                                    <Button loading={this.state.loadingInput} onClick={()=>{this.DonationInput(this.state.inputValue)}} style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
                                                 </Input>
                                             </Card.Description>
                                             <Divider/>
@@ -116,8 +144,8 @@ export default class Show extends Component{
                                                                 <Button style={{padding : '12px',fontSize : 15,borderRadius : 1.5}} fluid icon="heart" labelPosition="right" content="Save it!"/>
                                                             </Grid.Column>
                                                             <Grid.Column>
-                                                                <Link>
-                                                                    <a className="item" style={{
+                                                                <div>
+                                                                    <Button loading={this.state.loading} onClick={()=>{this.DonationButton(web3.utils.fromWei(this.props.minimumContribution,'ether'))}} className="item" style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
                                                                         backgroundColor : '#416DEA',
@@ -130,8 +158,8 @@ export default class Show extends Component{
                                                                         fontSize : 15,
                                                                         fontWeight : '600'}}>
                                                                         Donate {web3.utils.fromWei(this.props.minimumContribution,'ether')} ETH
-                                                                    </a>
-                                                                </Link>
+                                                                    </Button>
+                                                                </div>
                                                             </Grid.Column>
                                                         </Grid.Row>
                                                 </Grid>
