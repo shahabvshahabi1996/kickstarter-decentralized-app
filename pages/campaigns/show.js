@@ -28,7 +28,7 @@ export default class Show extends Component{
             value : Amount
         });
         this.setState({loading : false});
-        Router.push(`/campaigns/show/${this.props.address}`)
+        Router.replace(`/campaigns/show/${this.props.address}`)
 
     }
 
