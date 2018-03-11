@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import {Link , Router} from '../../routes';
 import Campaign from '../../campaign';
 import web3 from '../../web3';
+import SaveButton from '../components/SaveButton';
 import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
 
 export default class Show extends Component{
@@ -141,7 +142,7 @@ export default class Show extends Component{
                                                 <Grid stackable>
                                                         <Grid.Row columns={2}>
                                                             <Grid.Column>
-                                                                <Button style={{padding : '12px',fontSize : 15,borderRadius : 1.5}} fluid icon="heart" labelPosition="right" content="Save it!"/>
+                                                                <SaveButton />
                                                             </Grid.Column>
                                                             <Grid.Column>
                                                                 <div>
@@ -151,7 +152,7 @@ export default class Show extends Component{
                                                                         backgroundColor : '#416DEA',
                                                                         border : 'none',
                                                                         boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)',
-                                                                        padding : '10px',
+                                                                        padding : '12px',
                                                                         width : '100%',
                                                                         display : 'block',
                                                                         textAlign : 'center',
