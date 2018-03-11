@@ -208,8 +208,13 @@ export default class NewCampaginForm extends Component{
                 /> : <div></div> }
                     <Form>
                         <Form.Field>
-                            <label>Write Any Thing You Want about your Campaign</label>
-                            <TextArea value={this.state.aboutCampaign} onChange={event => {this.setState({aboutCampaign : event.target.value})}} autoHeight placeholder='Try adding multiple lines about your campagin and your goals' />
+                            <label>Write a Singel Line About Your Project</label>
+                            <TextArea rows={1} autoHeight placeholder='Try adding single lines about your campagin'/>
+                        </Form.Field>
+                        <Form.Field> 
+                            <label>Write Any Thing You Want about your Campaign (based on the <span style={{fontSize : 15,color : "#fff",fontWeight : 'bold',padding : '2px',backgroundColor : '#252525'}}>markdown</span> type style)</label>
+                            <TextArea rows={6} value={this.state.aboutCampaign} onChange={event => {this.setState({aboutCampaign : event.target.value})}} autoHeight placeholder='Try adding multiple lines in MarkDown about your campagin and your goals' />
+                            <p style={{color : '#aaa'}} className="date">use this link for more info : <a target="_blank" href="http://jbt.github.io/markdown-editor/">http://jbt.github.io/markdown-editor/</a> </p>
                         </Form.Field>
                         <Form.Field>
                             <label>Your Dreamy Budget for your Campagin</label>
