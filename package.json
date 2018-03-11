@@ -10,7 +10,8 @@
     "test": "mocha",
     "compile": "node compile.js",
     "deploy": "node deploy.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "server" : "node ./Server(back-end)/server.js"
   },
   "author": "Alireza Shahabi",
   "license": "MIT",
