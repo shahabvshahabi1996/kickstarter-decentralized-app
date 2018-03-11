@@ -15,6 +15,7 @@
   "author": "Alireza Shahabi",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.16.2",
     "fs-extra": "^5.0.0",
     "ganache-cli": "^6.0.3",
     "marked": "^0.3.17",
