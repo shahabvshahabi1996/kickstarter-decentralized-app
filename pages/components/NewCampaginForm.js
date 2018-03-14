@@ -23,6 +23,7 @@ export default class NewCampaginForm extends Component{
             minimumDonation : '',
             author : '',
             image : '',
+            info : '',
             errorMessage : [],
             loading : false
          }
@@ -44,7 +45,8 @@ export default class NewCampaginForm extends Component{
             walletAddress,
             minimumDonation,
             author,
-            image
+            image,
+            info
         } = this.state;
         this.setState({errorMessage : []})
         if(newIndex == 0){
@@ -63,7 +65,7 @@ export default class NewCampaginForm extends Component{
             }
         }
         else if(newIndex == 1){
-            if(aboutCampaign.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget) && image.length > 0){
+            if(aboutCampaign.length > 0 && info.length > 0 && expectedBudget.length > 0 && !isNaN(expectedBudget) && image.length > 0){
                 newIndex = newIndex + 1;
                 this.setState({index : newIndex})
             }
@@ -74,7 +76,9 @@ export default class NewCampaginForm extends Component{
                 if(!expectedBudget.length > 0)
                     errors.push('plz enter your dreamy budget');
                 if(!image.length > 0)
-                    errors.push('plz enter an image url');          
+                    errors.push('plz enter an image url');
+                if(!info.length > 0)
+                    errors.push('plz enter a single line about your project')               
 
                 this.setState({errorMessage : errors});
             }
@@ -88,10 +92,33 @@ export default class NewCampaginForm extends Component{
                     let min = await web3.utils.toWei(minimumDonation,'ether');
                     let expect = await web3.utils.toWei(expectedBudget,'ether');
 
-                    await factory.methods.createCampaign(min,campaginName,aboutCampaign,category,author,image,expect)
+                    await factory.methods.createCampaign(min)
                     .send({
                         from : account[0]
-                    })
+                    });
+                    
+                    let campAddress = await factory.methods.tempAddress().call();
+
+                    await fetch('http://localhost:8000/new/campaign', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name : campaginName,
+                            author : author,
+                            category : category,
+                            campaignAddress : campAddress,
+                            manager : walletAddress[0],
+                            info : info,
+                            image : image,
+                            budget : expect,
+                            minimum : min,
+                            description : aboutCampaign
+                        })
+                    });
+
                     this.setState({loading : false});                    
                     Router.push('/');
                     
@@ -209,7 +236,7 @@ export default class NewCampaginForm extends Component{
                     <Form>
                         <Form.Field>
                             <label>Write a Singel Line About Your Project</label>
-                            <TextArea rows={1} autoHeight placeholder='Try adding single lines about your campagin'/>
+                            <TextArea rows={1} value={this.state.info} onChange={(e)=>{this.setState({info : e.target.value})}} autoHeight placeholder='Try adding single lines about your campagin'/>
                         </Form.Field>
                         <Form.Field> 
                             <label>Write Any Thing You Want about your Campaign (based on the <span style={{fontSize : 15,color : "#fff",fontWeight : 'bold',padding : '2px',backgroundColor : '#252525'}}>markdown</span> type style)</label>
