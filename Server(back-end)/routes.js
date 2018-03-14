@@ -13,7 +13,7 @@ module.exports = (app) => {
     .post(
         authController.logout
     )
-
+/*--------------------------------------------------*/
     app.route('/new/campaign')
     .post(
         userController.addCampagin
@@ -38,4 +38,11 @@ module.exports = (app) => {
     .post(
         userController.reportCampagin
     )
+
+    app.route('/get/all/campaigns')
+    .get(
+        userController.getAllCampaigns
+    )
+/*--------------------------------------------------*/
+    
 }
