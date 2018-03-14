@@ -19,22 +19,17 @@ export default class Cards extends Component{
 
     async componentDidMount(){
         await this.setState({datas : this.props.datas})
-
     }
 
     render(){
         var {datas} = this.state;
-        console.log(datas);
+        console.log(this.props.datas);
         if(datas != undefined)
         return(
             <Grid stackable>
                 <Grid.Row columns={3}>
-                    {datas.filter((data)=>{
-                        if(this.state.category.length > 0)
-                            return data.category == this.state.category;
-                        else
-                            return data  
-                    }).map((data,index)=>{
+                {/*  */}
+                    {datas.map((data,index)=>{
                         console.log(data.image)
                         return(
                             <Grid.Column key={index}>
@@ -57,12 +52,12 @@ export default class Cards extends Component{
                                             </h5>
                                         </Card.Meta>
                                         <Card.Description>
-                                            <p>{data.aboutCamapaign === undefined ? ' ' : data.aboutCamapaign.length <= 50 ? data.aboutCamapaign : data.aboutCamapaign.slice(0,50) + '...' }</p>
+                                            <p>{data.info === undefined ? ' ' : data.info.length <= 50 ? data.info : data.info.slice(0,50) + '...' }</p>
                                         </Card.Description>
                                         <Divider/>
                                         <Card.Description>
                                             {/* {data.budget}% funded */}
-                                            Pledged of  {web3.utils.fromWei(data.budget,'ether')} ether
+                                            Pledged of  {web3.utils.fromWei(`${data.budget}`,'ether')} ether
                                             {/* <ProgressBar percent={data.budget}/> */}
                                         </Card.Description>
                                         <Divider/>
