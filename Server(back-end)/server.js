@@ -29,11 +29,16 @@ app.use(flash());
 app.use(expressValidator());
 app.use(express.static(__dirname + './public'));
 /* --------------------------------------------------------- */
-const connection = 'mongodb://<dbuser>:<dbpassword>@ds111319.mlab.com:11319/kickstarter';
 /* --------------------------------------------------------- */
 app.set('view engine', 'ejs');
 const routes = require('./routes'); 
 routes(app);
 /* --------------------------------------------------------- */
+require('./model/campaignModel');
+require('./model/favoriteModel');
+require('./model/reportsModel');
+require('./model/userModel');
+/* --------------------------------------------------------- */
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+/* --------------------------------------------------------- */
