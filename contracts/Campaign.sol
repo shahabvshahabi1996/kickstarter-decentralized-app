@@ -2,63 +2,18 @@ pragma solidity ^0.4.17;
 
 contract CampaignFactory {
     address[] public deployedCampaigns;
+    address public tempAddress;
     
-    struct CampaignStruct {
-        string campaginName;
-        string aboutCamapaign;
-        string category;
-        string author;
-        string image;
-        uint budget;
-        uint minumumContribution;
-        address manager;
-        address campaignAddress;
-    }
-    
-    CampaignStruct[] public campaigns;
-        
-    function createCampaign(uint minumum,
-    string Name,
-    string About,
-    string Category,
-    string Author,
-    string Image,
-    uint dreamyBudget)
-    public {
-        address newCampaign = new Campaign(
-            minumum,
-            msg.sender,
-            Name,
-            About,
-            Category,
-            Author,
-            Image,
-            dreamyBudget);
-        
-        CampaignStruct memory newCamp = CampaignStruct({
-            campaginName : Name,
-            aboutCamapaign : About,
-            category : Category,
-            author : Author,
-            image : Image,
-            budget : dreamyBudget,
-            minumumContribution : minumum,
-            manager : msg.sender,
-            campaignAddress : newCampaign
-        });
-        
-        campaigns.push(newCamp);
-        
+    function createCampaign(uint minumum) public {
+        address newCampaign = new Campaign(minumum,msg.sender);
         deployedCampaigns.push(newCampaign);
+        tempAddress = newCampaign;
     }
     
     function getAllCampaigns() public view returns(address[]) {
         return deployedCampaigns;
     }
     
-    function getCampaignLength() public view returns(uint){
-        return campaigns.length;
-    }
 }
 
 contract Campaign {
@@ -73,14 +28,6 @@ contract Campaign {
     }
     
     Request[] public requests;
-    
-    string public CampaginName;
-    string public AboutCamapaign;
-    string public Category;
-    string public Author;
-    string public Image;
-    uint public DreamyBudget;
-    
     
     address public manager;
     
@@ -107,23 +54,9 @@ contract Campaign {
         _;
     }
     
-    function Campaign(
-    uint minumum,
-    address creator,
-    string Name,
-    string aboutCamapaign,
-    string category,
-    string author,
-    string image,
-    uint dreamyBudget) public {
+    function Campaign(uint minumum,address creator) public {
         manager = creator;
         minumumContribution = minumum;
-        CampaginName = Name;
-        AboutCamapaign = aboutCamapaign;
-        Category = category;
-        Author = author;
-        Image = image;
-        DreamyBudget = dreamyBudget;
     }
     
     function contribute() isValidValue public payable {
@@ -169,12 +102,5 @@ contract Campaign {
         request.complete = true;
     }
     
-    function getSummary() public view returns(uint, uint, uint, uint, address, string, string, string, string, string) {
-        return ( minumumContribution, DreamyBudget, this.balance, approversCount, manager, CampaginName, Author, Image, AboutCamapaign, Category);
-    }
-
-    function getRequestsLength() public view returns(uint) {
-        return requests.length;
-    }
     
 }
