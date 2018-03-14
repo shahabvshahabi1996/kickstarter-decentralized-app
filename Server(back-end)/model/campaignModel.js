@@ -53,6 +53,10 @@ var campaignSchema = new Schema({
     minimum : {
         type : Number,
         required : 'Plz enter a minimum contribution amount'
+    },
+    description : {
+        type : String,
+        required : 'Plz write some content about your project'
     }
 
 });
@@ -62,4 +66,4 @@ mongoose.plugin(mongodbErrorHandlers);
 mongoose.connect(connection);
 /*------------------------------------------------------------------------*/
 
-module.exports = mongoose.model('Campaign',campaignSchema );
+module.exports = mongoose.model('Campaign',campaignSchema);
