@@ -34,22 +34,33 @@ const datas = [
 export default class CampaignIndex extends Component {
     static async getInitialProps(){
         let campaign = [] ;
-        const campaignsAddress = await factory.methods.getAllCampaigns().call();
-        let campaignCounter = await factory.methods.getCampaignLength().call();
-        for(let i = campaignCounter - 1; i >= 0 ;i--){
-            campaign.push(await factory.methods.campaigns(i).call());
-        }
-        return {campaignsAddress , campaign };
+        // await fetch('http://localhost:8000/get/all/campaigns').then((response) => response.json())
+        // .then((responseJson) => {
+        //   campaign = responseJson.data;
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // });
+        return { campaign };
     }
 
     constructor(){
         super();
         this.state = {
-            category : ''
+            category : '',
+            campaign : ''
         }
     }
 
+    async componentDidMount(){
+        let response = await fetch('http://localhost:8000/get/all/campaigns');
+        let campaign = await response.json();
+        this.setState({campaign : campaign.data})
+    }
+
     render(){
+        const { campaign } = this.state;
+        if(campaign)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
                 <Navbar/>
@@ -87,7 +98,7 @@ export default class CampaignIndex extends Component {
                             </span>
                         </h1>
                         <br/>
-                        <Cards datas={this.props.campaign}/>
+                        <Cards datas={this.state.campaign}/>
                         <br/>
                         <br/>
                     </Container>
@@ -123,6 +134,10 @@ export default class CampaignIndex extends Component {
                     </Container>
                 </div>
             </div>
+        )
+        else
+        return(
+            <div></div>
         )
     }
 }
