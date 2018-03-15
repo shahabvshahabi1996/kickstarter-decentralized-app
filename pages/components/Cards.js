@@ -62,7 +62,7 @@ export default class Cards extends Component{
                                         </Card.Description>
                                         <Divider/>
                                         <Card.Description>
-                                        <Link route={`/campaigns/show/${data.campaignAddress}`}>
+                                        <Link route={`/campaigns/show/${data.campaignAddress}/${data.manager}`}>
                                             <a className="item" style={{
                                                 borderRadius : 2,
                                                 color : '#fff',
