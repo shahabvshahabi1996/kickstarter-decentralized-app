@@ -14,6 +14,11 @@ module.exports = (app) => {
         authController.logout
     )
 /*--------------------------------------------------*/
+    app.route('/find/campaign')
+    .post(
+        userController.findCampaign
+    )
+
     app.route('/new/campaign')
     .post(
         userController.addCampagin
