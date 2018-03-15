@@ -6,6 +6,7 @@ import {Link , Router} from '../../routes';
 import Campaign from '../../campaign';
 import web3 from '../../web3';
 import SaveButton from '../components/SaveButton';
+import moment from 'moment';
 import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
 
 export default class Show extends Component{
@@ -14,7 +15,8 @@ export default class Show extends Component{
         this.state = {
             loading : false,
             inputValue : '',
-            loadingInput : false
+            loadingInput : false,
+            data : ''
         }
     }
 
@@ -29,7 +31,7 @@ export default class Show extends Component{
             value : Amount
         });
         this.setState({loading : false});
-        Router.replace(`/campaigns/show/${this.props.address}`)
+        Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
 
     }
 
@@ -38,7 +40,6 @@ export default class Show extends Component{
         let Amount = await web3.utils.toWei(amount,'ether');
         if(Amount < this.props.minimumContribution){
             alert("plz enter a value more than minimin contribution!!!");
-
         }
         else{
             const campagin = await Campaign(this.props.address);
@@ -48,7 +49,7 @@ export default class Show extends Component{
                 value : Amount
             });
             this.setState({loadingInput : true});
-            Router.push(`/campaigns/show/${this.props.address}`)
+            Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
         }
     }
 
@@ -56,21 +57,47 @@ export default class Show extends Component{
         const campagin = Campaign(props.query.address);
         const summary = await campagin.methods.getSummary().call();
         return { 
-            address : props.query.address,
-            minimumContribution : summary[0],
-            dreamyBudget : summary[1],
-            amountRaised : summary[2],
-            manager : summary[4],
+            address : props.query.address ,
+            amountRaised : summary[1],
+            minimumContribution : summary[2],
             approversCount : summary[3],
-            campaignName : summary[5],
-            author : summary[6],
-            image : summary[7],
-            aboutCampaign : summary[8],
-            category : summary[9]
+            // dreamyBudget : summary[1],
+            // manager : summary[4],
+            // campaignName : summary[5],
+            // author : summary[6],
+            // image : summary[7],
+            // aboutCampaign : summary[8],
+            // category : summary[9]
+            manager : props.query.manager
          };
     }
 
+    async componentDidMount(){
+        let accounts = await web3.eth.getAccounts();
+        const result = await fetch('http://localhost:8000/find/campaign',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                campaignAddress: this.props.address,
+                manager: accounts[0]
+            })
+        });
+
+        const campResult = await result.json();
+        let nonDate = await campResult.data.expiredDate.slice(0,10);
+        let date = new Date(`${nonDate}`)
+        var diff = new moment.duration(date.getTime() - Date.now());
+        let newDate = Math.floor(diff.asDays());
+        this.setState({data : campResult.data , date : newDate});
+    }
+
     render(){
+        const { data , date } = this.state;
+        console.log(data);
+        if(data)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>
                 <Navbar/>
@@ -81,12 +108,12 @@ export default class Show extends Component{
                                 <Grid.Column width={16}>
                                     <h1 style={{fontSize : 35}}>
                                     <span style={{backgroundColor : '#fff',padding : '5px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                                        {this.props.campaignName}
+                                        {data.name}
                                     </span>
                                     </h1>
                                     <h4 style={{color : '#252525'}}>
                                     <span style={{backgroundColor : '#fff',padding : '5px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                                        Taking inspiration from a surgeon's scalpel we've created a handmade steak knife like no other.
+                                        {data.info}
                                     </span>
                                     </h4>
                                     <div style={{marginTop : '25px'}}>
@@ -94,7 +121,7 @@ export default class Show extends Component{
                                             <span style={{backgroundColor : '#fff',padding : '15px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.1)'}}>
                                                 <Image src='https://placeholdit.co//i/580x580?bg=eeeeee' avatar size="mini"/>
                                                 <span style={{marginLeft : '5px'}}>
-                                                    <span style={{fontWeight : 'bold',fontSize : 15}}>{this.props.author}</span>
+                                                    <span style={{fontWeight : 'bold',fontSize : 15}}>{data.author}</span>
                                                 </span>
                                             </span>
                                             <br/>
@@ -108,16 +135,16 @@ export default class Show extends Component{
                                 <Grid.Row columns={2}>
                                     <Grid.Column width={9}>
                                         <div style={{textAlign : 'center',margin : 0}}>
-                                            <Image centered size="massive" src={this.props.image} />
+                                            <Image centered size="massive" src={data.image} />
                                         </div>
                                     </Grid.Column>
                                     <Grid.Column width={7}>
                                     <Card fluid style={{borderRadius : 1.5,boxShadow : 'none'}}>
                                         <Card.Content>
                                             <div>
-                                                <Progress style={{borderRadius : 1.5,marginBottom : '15px'}} color="blue" size="tiny" percent={(this.props.amountRaised / this.props.dreamyBudget) * 100} />
-                                                <span style={{fontSize : 30,color : 'rgba(65,109,234,0.9)'}}>{web3.utils.fromWei(this.props.amountRaised,'ether')} ETH</span><br/>
-                                                <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>pledged of <span>{web3.utils.fromWei(this.props.dreamyBudget,'ether')} ETH</span> goal</span>
+                                                <Progress style={{borderRadius : 1.5,marginBottom : '15px'}} color="blue" size="tiny" percent={(this.props.amountRaised / data.budget) * 100} />
+                                                <span style={{fontSize : 30,color : 'rgba(65,109,234,0.9)'}}>{web3.utils.fromWei(`${this.props.amountRaised}`,'ether')} ETH</span><br/>
+                                                <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>pledged of <span>{web3.utils.fromWei(`${data.budget}`,'ether')} ETH</span> goal</span>
                                             </div>
                                             <br/>
                                             <div>
@@ -126,12 +153,12 @@ export default class Show extends Component{
                                             </div>
                                             <br/>
                                             <div>
-                                                <span style={{display : 'block',fontWeight : '600',fontSize : 18,color : 'rgba(65,109,234,0.9)'}}>15</span>
+                                                <span style={{display : 'block',fontWeight : '600',fontSize : 18,color : 'rgba(65,109,234,0.9)'}}>{date}</span>
                                                 <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>Days to go</span>
                                             </div>
                                             <br/>
                                             <Card.Description>
-                                                <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(this.props.minimumContribution,'ether')}`} action>
+                                                <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(`${this.props.minimumContribution}`,'ether')}`} action>
                                                     <Label>ETH</Label>
                                                     <input disabled={this.state.loadingInput} value={this.state.inputValue} />
                                                     <Button loading={this.state.loadingInput} onClick={()=>{this.DonationInput(this.state.inputValue)}} style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
@@ -171,7 +198,7 @@ export default class Show extends Component{
                                                         <Grid.Column>
                                                             <span style={{backgroundColor : '#eee',padding : '5px',margin : '5px'}}>
                                                                 <Icon name="tag" />
-                                                                {this.props.category}
+                                                                {data.category}
                                                             </span>
                                                             <span style={{backgroundColor : '#eee',padding : '5px',margin : '5px'}}>
                                                                 <Icon name="location arrow" />
@@ -195,8 +222,8 @@ export default class Show extends Component{
                         <Grid stackable>
                             <Grid.Row columns={1}>
                                 <Grid.Column>
-                                    <div dangerouslySetInnerHTML={{__html : marked(this.props.aboutCampaign)}}>
-                                    </div> 
+                                    <div dangerouslySetInnerHTML={{__html : marked(data.description)}}>
+                                    </div>
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
@@ -213,5 +240,10 @@ export default class Show extends Component{
                 </div>
             </div>
         )
+        else{
+            return(
+                <div/>
+            )
+        }
     }
 }
