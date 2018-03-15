@@ -12,6 +12,27 @@ exports.getAllCampaigns = async (req,res) => {
     return;
 }
 
+exports.findCampaign = async (req,res) => {
+    console.log(req.body);
+    const result = await Campaign.findOne({manager : req.body.manager , campaignAddress : req.body.campaignAddress})
+    if(result){
+        console.log(req.body);
+        res.json({
+            status : 'success',
+            data : result
+        });
+    
+        return ;
+    }
+    else{
+        res.json({
+            status : 'error',
+            data : result
+        })
+    }
+
+}
+
 exports.addCampagin = async (req,res) => {
     const campaign = await Campaign.findOne({manager : req.body.manager});
     if(campaign){
@@ -40,7 +61,8 @@ exports.addCampagin = async (req,res) => {
             else{
                 const newCamp = await Campaign.findOne({campaignAddress : req.body.campaignAddress})
                 res.json({ status : 'success',message : 'you posted a new campagin',data : newCamp.campaignAddress});
-                console.log('right')
+                
+                return;
             }
         })
     }
