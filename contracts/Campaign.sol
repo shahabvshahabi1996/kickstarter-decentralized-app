@@ -102,5 +102,10 @@ contract Campaign {
         request.complete = true;
     }
     
+    //manager , balance ,minumumContribution , approversCount
+    
+    function getSummary() public view returns(address , uint , uint , uint){
+        return ( manager , this.balance , minumumContribution , approversCount );
+    }
     
 }
