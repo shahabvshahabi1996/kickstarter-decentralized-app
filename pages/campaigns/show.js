@@ -61,13 +61,6 @@ export default class Show extends Component{
             amountRaised : summary[1],
             minimumContribution : summary[2],
             approversCount : summary[3],
-            // dreamyBudget : summary[1],
-            // manager : summary[4],
-            // campaignName : summary[5],
-            // author : summary[6],
-            // image : summary[7],
-            // aboutCampaign : summary[8],
-            // category : summary[9]
             manager : props.query.manager
          };
     }
