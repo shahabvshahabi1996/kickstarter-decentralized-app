@@ -27,6 +27,7 @@ const userSchema = new Schema({
           type:String,
           default : "/images/profile-black.jpg"
     },
+    password : String,
     token : String,
     expiredToken : Date
 })
