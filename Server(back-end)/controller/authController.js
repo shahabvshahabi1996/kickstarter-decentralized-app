@@ -1,9 +1,154 @@
-exports.signup = (req,res) => {
+const mongoose = require('mongoose');
+var User = require('../model/userModel');
+const jwt = require('jsonwebtoken');
+
+
+exports.verifyToken = async (req,res,next) => {
+
+    jwt.verify(req.body.token , 'secretkey' , (err,decoded)=>{
+        if(!err){
+            next();
+            return;
+        } 
+        else{
+            res.json({
+                status : 'error',
+                message : 'your token is not valid'
+            })
+            return;
+        }
+    });
+
+    return;
+}
+
+
+exports.verifyUserForLogIn = async ( req,res,next )=>{
+    const user = await User.findOne({email : req.body.email , password : req.body.password});
+    console.log(user);
+    if(user){
+        req.body.data = {
+            email : req.body.email,
+            password : req.body.password
+        }
+        next();
+        return;
+    }
+
+    else{
+        res.json({
+            status : 'error',
+            message : 'please enter a valid email and password'
+        })
+    }
+}
+
+exports.validateRegister = (req,res,next) => {
+
+    req.checkBody('name' , 'plz enter a valid name').notEmpty()
+    req.checkBody('password', 'your passwords is not match').equals(req.body.repassword);
+    req.checkBody('password', 'passwords must be at least 5 chars long and contain one number').isLength({ min: 5 }).notEmpty();
+    req.checkBody('email','plz enter a valid email address').notEmpty().isEmail();
+    req.sanitizeBody('email').normalizeEmail();
+    var errors = req.validationErrors();
+    if(errors){
+        let message = [];
+        for(let i=0;i<errors.length;i++){
+            message.push(errors[i].msg);  
+        }
+        res.json({
+            status : 'error',
+            message : message
+        })
+    }
+    else
+    next();
+}
+
+exports.verifyUserForSignUp = async ( req, res , next) => {
+
+    const user = await User.findOne({email : req.body.email});
+    if(!user){
+       req.body.data = { name : req.body.name , email : req.body.email , password : req.body.password } 
+        next();
+        return;
+    }
+    else{
+        res.json({
+            status : 'error',
+            message : 'Hey there were a problem with your signup plz check the email'
+        })
+        return;
+    }
+}
+
+exports.signToken = (req, res , next) => {
+
+    jwt.sign({ data : req.body.data}, 'secretkey',{expiresIn : '24 hours'} , (err,token) => {
+        if(err){
+            res.json({
+                status : 'error',
+                message : 'something went wrong in signing a token'
+            })
+            return ;
+        }
+
+        else{
+            req.body.token = token;
+            next();
+        }
+    });    
+}   
+
+exports.signup = async (req,res) => {
+    const token = req.body.token;
+    new User({
+        name : req.body.name,
+        email : req.body.email,
+        password : req.body.password,
+        token : req.body.token,
+        expiredToken : new Date() + 86400000
+    }).save((err)=>{
+        if(err){
+            res.json({
+                status : 'error',
+                message : 'there were a problem with your signup!!'
+            })
+            return;
+        }
+        else{
+            res.json({ 
+                token,
+                status : 'success',
+                message : 'you have success fully signed up!'
+            });
+        }
+    })
+
+    return;
 
 }
 
-exports.login = (req,res,next) => {
+exports.login = async (req,res) => {
+    await User.findOneAndUpdate({email : req.body.email , password : req.body.password} , { token : req.body.token} , (err , data) => {
+        console.log(data);
+        if(err){
+            res.json({
+                status : 'error',
+                message : 'there were an error while you logging in'
+            });
+            return;
+        }
 
+        else{
+            let token = req.body.token;
+            res.json({ 
+                token,
+                status : 'success',
+                message : 'you have success fully logged in!'
+            });
+        }
+    });
 }
 
 exports.logout = (req,res) => {
