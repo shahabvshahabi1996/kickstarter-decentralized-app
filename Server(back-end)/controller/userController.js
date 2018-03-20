@@ -14,7 +14,7 @@ exports.getAllCampaigns = async (req,res) => {
 
 exports.findCampaign = async (req,res) => {
     console.log(req.body);
-    const result = await Campaign.findOne({manager : req.body.manager , campaignAddress : req.body.campaignAddress})
+    const result = await Campaign.findOne({campaignAddress : req.body.campaignAddress})
     if(result){
         console.log(req.body);
         res.json({
