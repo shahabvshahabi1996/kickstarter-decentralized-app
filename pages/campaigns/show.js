@@ -16,13 +16,14 @@ export default class Show extends Component{
             loading : false,
             inputValue : '',
             loadingInput : false,
-            data : ''
+            data : undefined,
+            dateInMilliSeconds : undefined,
+            isManager : false
         }
     }
 
     async DonationButton(amount){
         this.setState({loading : true});
-        console.log(this.props.address)
         const campagin = await Campaign(this.props.address);
         let Amount = await web3.utils.toWei(amount,'ether');
         let accounts = await web3.eth.getAccounts();
@@ -32,7 +33,6 @@ export default class Show extends Component{
         });
         this.setState({loading : false});
         Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
-
     }
 
     async DonationInput(amount){
@@ -66,7 +66,6 @@ export default class Show extends Component{
     }
 
     async componentDidMount(){
-        let accounts = await web3.eth.getAccounts();
         const result = await fetch('http://localhost:8000/find/campaign',{
             method: 'POST',
             headers: {
@@ -74,21 +73,31 @@ export default class Show extends Component{
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                campaignAddress: this.props.address,
-                manager: accounts[0]
+                campaignAddress: this.props.address
             })
         });
-
+        
+        let isManger = false;
+        let user = await web3.eth.getAccounts();
         const campResult = await result.json();
-        let nonDate = await campResult.data.expiredDate.slice(0,10);
-        let date = new Date(`${nonDate}`)
+        if(campResult.data.manager === user[0]){
+            isManger = true;
+        }
+        let nonDate = campResult.data.expiredDate.slice(0,10);
+        let date = new Date(`${nonDate}`);
         var diff = new moment.duration(date.getTime() - Date.now());
         let newDate = Math.floor(diff.asDays());
-        this.setState({data : campResult.data , date : newDate});
+
+        this.setState({
+            data : campResult.data ,
+            date : newDate ,
+            dateInMilliSeconds : date , 
+            isManager : isManger
+        });
     }
 
     render(){
-        const { data , date } = this.state;
+        const { data , date , dateInMilliSeconds } = this.state;
         console.log(data);
         if(data)
         return(
@@ -150,13 +159,13 @@ export default class Show extends Component{
                                                 <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>Days to go</span>
                                             </div>
                                             <br/>
-                                            <Card.Description>
+                                            {dateInMilliSeconds > new Date().getTime() ? <Card.Description>
                                                 <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(`${this.props.minimumContribution}`,'ether')}`} action>
                                                     <Label>ETH</Label>
                                                     <input disabled={this.state.loadingInput} value={this.state.inputValue} />
                                                     <Button loading={this.state.loadingInput} onClick={()=>{this.DonationInput(this.state.inputValue)}} style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
                                                 </Input>
-                                            </Card.Description>
+                                            </Card.Description> : <div /> }
                                             <Divider/>
                                             <div>
                                                 <Grid stackable>
@@ -165,7 +174,7 @@ export default class Show extends Component{
                                                                 <SaveButton />
                                                             </Grid.Column>
                                                             <Grid.Column>
-                                                                <div>
+                                                                {dateInMilliSeconds > new Date().getTime() ? <div>
                                                                     <Button loading={this.state.loading} onClick={()=>{this.DonationButton(web3.utils.fromWei(this.props.minimumContribution,'ether'))}} className="item" style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
@@ -180,7 +189,8 @@ export default class Show extends Component{
                                                                         fontWeight : '600'}}>
                                                                         Donate {web3.utils.fromWei(this.props.minimumContribution,'ether')} ETH
                                                                     </Button>
-                                                                </div>
+                                                                </div> : <div></div> }
+                                                                
                                                             </Grid.Column>
                                                         </Grid.Row>
                                                 </Grid>
