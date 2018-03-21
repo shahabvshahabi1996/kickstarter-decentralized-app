@@ -1,5 +1,6 @@
 import React , {Component} from 'react';
 import { Button, Checkbox, Form , Divider } from 'semantic-ui-react'
+import {Router} from '../../routes';
 
 export default class SignUpForm extends Component{
     constructor(){
@@ -35,8 +36,7 @@ export default class SignUpForm extends Component{
                 if(response.status == 'success'){
                     localStorage.setItem("token" , `${response.token}`);
                     //redirect it to the admin or some where like that
-                    const token = await localStorage.getItem('token')
-                    console.log(token);  
+                    Router.push('/');
                 }
                 else{
                     this.setState({message : response.message})
