@@ -108,7 +108,7 @@ exports.signup = async (req,res) => {
         password : req.body.password,
         token : req.body.token,
         expiredToken : new Date() + 86400000
-    }).save((err)=>{
+    }).save((err)=>{ 
         if(err){
             res.json({
                 status : 'error',
