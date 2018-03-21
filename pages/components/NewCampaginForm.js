@@ -3,6 +3,7 @@ import { Form , Label , Dimmer , Message , Loader , Grid , Button , Step , Input
 import factory from '../../factory';
 import web3 from '../../web3';
 import {Router} from '../../routes';
+import jwt from 'jsonwebtoken';
 const options = [
   { key: 'm', text: 'Arts', value: 'Arts' },
   { key: 'f', text: 'Design & Tech', value: 'Design & Tech' },
@@ -28,10 +29,24 @@ export default class NewCampaginForm extends Component{
             loading : false
          }
     }
-
+    
     async componentDidMount(){
         let account = await web3.eth.getAccounts(); 
-        this.setState({walletAddress : account,author : 'Alireza Shahabi'});
+        this.setState({walletAddress : account});
+        try{
+            const token = localStorage.getItem('token');
+            const decoded = jwt.verify(token , 'secretkey');
+            if(!token || decoded.exp * 1000 < new Date().getTime()){
+                return false;
+            }
+            this.setState({
+                author : decoded.data.name,
+                token : token
+            })
+        } catch(e){
+                Router.push('/login');
+                console.log(e);
+        }
     }
 
     async increaseIndex() {
