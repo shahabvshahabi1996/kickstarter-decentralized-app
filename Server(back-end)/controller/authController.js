@@ -24,12 +24,13 @@ exports.verifyToken = async (req,res,next) => {
 
 
 exports.verifyUserForLogIn = async ( req,res,next )=>{
-    const user = await User.findOne({email : req.body.email , password : req.body.password});
-    console.log(user);
+    console.log(req.body);
+    const user = await User.findOne({email : req.body.email , password : req.body.password})
     if(user){
         req.body.data = {
-            email : req.body.email,
-            password : req.body.password
+            email : user.email,
+            password : user.password,
+            name:user.name
         }
         next();
         return;
@@ -41,6 +42,25 @@ exports.verifyUserForLogIn = async ( req,res,next )=>{
             message : 'please enter a valid email and password'
         })
     }
+}
+
+exports.validateLogin = (req, res , next) => {
+    req.checkBody('email','plz enter a valid email address').notEmpty().isEmail();
+    req.checkBody('password','plz enter passowd').notEmpty();
+    req.sanitizeBody('email').normalizeEmail();
+    var errors = req.validationErrors();
+    if(errors){
+        let message = [];
+        for(let i=0;i<errors.length;i++){
+            message.push(errors[i].msg);  
+        }
+        res.json({
+            status : 'error',
+            message : message
+        })
+    }
+    else
+    next();
 }
 
 exports.validateRegister = (req,res,next) => {
