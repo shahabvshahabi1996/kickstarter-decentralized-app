@@ -18,11 +18,18 @@ export default class Navbar extends Component{
 
     componentDidMount(){
       const token = localStorage.getItem('token');
-      console.log(token);
+      let exp;
+      let name;
       if(token){
-        const decoded = jwt.verify(token , 'secretkey');
-        console.log(decoded);
-        this.setState({ exp : decoded.exp * 1000 , name : decoded.data.name }); 
+        try{
+          const decoded = jwt.verify(token , 'secretkey');
+          exp = decoded.exp * 1000;
+          name = decoded.data.name;
+        } catch(e){
+          exp = null;
+          name = null;
+        }
+        this.setState({exp,name}); 
       }
       
       this.setState({token});
