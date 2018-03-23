@@ -66,6 +66,7 @@ export default class Show extends Component{
     }
 
     async componentDidMount(){
+        const token = localStorage.getItem('token');
         const result = await fetch('http://localhost:8000/find/campaign',{
             method: 'POST',
             headers: {
@@ -92,7 +93,8 @@ export default class Show extends Component{
             data : campResult.data ,
             date : newDate ,
             dateInMilliSeconds : date , 
-            isManager : isManger
+            isManager : isManger,
+            token
         });
     }
 
@@ -159,7 +161,7 @@ export default class Show extends Component{
                                                 <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>Days to go</span>
                                             </div>
                                             <br/>
-                                            {dateInMilliSeconds > new Date().getTime() ? <Card.Description>
+                                            {dateInMilliSeconds > new Date().getTime() && this.state.token ? <Card.Description>
                                                 <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(`${this.props.minimumContribution}`,'ether')}`} action>
                                                     <Label>ETH</Label>
                                                     <input disabled={this.state.loadingInput} value={this.state.inputValue} />
@@ -174,7 +176,7 @@ export default class Show extends Component{
                                                                 <SaveButton />
                                                             </Grid.Column>
                                                             <Grid.Column>
-                                                                {dateInMilliSeconds > new Date().getTime() ? <div>
+                                                                {dateInMilliSeconds > new Date().getTime() && this.state.token ? <div>
                                                                     <Button loading={this.state.loading} onClick={()=>{this.DonationButton(web3.utils.fromWei(this.props.minimumContribution,'ether'))}} className="item" style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
@@ -231,9 +233,10 @@ export default class Show extends Component{
                             </Grid.Row>
                         </Grid>
                         </div>
-                        <div style={{marginTop : '10px'}}>
+                        {this.state.token && dateInMilliSeconds > new Date().getTime() ? <div style={{marginTop : '10px'}}>
                             <Button content="Report Project" />
-                        </div>                
+                        </div> : <div/> }
+                                        
                     </Container>
                 </div>
                 <div className="Footer" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
