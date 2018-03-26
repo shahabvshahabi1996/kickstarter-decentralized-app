@@ -171,8 +171,22 @@ exports.login = async (req,res) => {
     });
 }
 
-exports.logout = (req,res) => {
-
+exports.logout = async (req,res) => {
+    const user = await User.findOne({token : req.body.token});
+    if(user){
+        user.token = undefined;
+        user.expiredToken = undefined;
+        res.json({
+            status : 'success',
+            message : 'you have successfully loged out'
+        });
+    }
+    else{
+        res.json({
+            status : 'error',
+            message : 'there is a problem with your logging out!'
+        });
+    }
 }
 
 exports.deleteAccount = (req,res) => {
