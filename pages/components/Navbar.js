@@ -16,6 +16,31 @@ export default class Navbar extends Component{
       this.setState({ activeItem: name });
     } 
 
+    logOut = async ()=>{
+      let { token } = this.state;
+      console.log(token);
+      const res = await fetch('http://localhost:8000/logout',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: token
+            })
+      });
+      const result = await res.json();
+      if(result.status == 'success'){
+        this.setState({token : undefined});
+        localStorage.removeItem('token');
+        Router.push('/'); 
+      }
+
+      else{
+        alert('there is problem while logging out');
+      }
+    }
+
     componentDidMount(){
       const token = localStorage.getItem('token');
       let exp;
@@ -58,8 +83,14 @@ export default class Navbar extends Component{
                 content='Look for your dreamy project,and make it alive!'
                 on='focus'/>
               </Menu.Item>
-              <Menu.Item name={`/profile/${this.state.token}`} active={activeItem === '/profile'} onClick={this.handleItemClick}>
-                <h4>{name}</h4>
+              <Menu.Item name={`/profile/${this.state.token}`} active={activeItem === '/profile'} >
+              <Dropdown text={`${this.state.name}`} style={{fontWeight : 'bold'}} pointing='down' className='link item'>
+                <Dropdown.Menu>
+                  <Dropdown.Item>profile</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={this.logOut}>Log Out</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
               </Menu.Item>
             </Menu.Menu>
           </Menu>
