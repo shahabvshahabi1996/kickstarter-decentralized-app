@@ -15,6 +15,7 @@ export default class SignUpForm extends Component{
     }
 
     async sumbitForm(){
+        this.setState({loading : true});
         const { name , email , password , repassword } = this.state;
         console.log(this.state);
         if(name.length > 0 && email.length > 0 && password === repassword){
@@ -37,17 +38,37 @@ export default class SignUpForm extends Component{
                     localStorage.setItem("token" , `${response.token}`);
                     //redirect it to the admin or some where like that
                     Router.push('/');
+                    this.setState({loading : false});
                 }
                 else{
                     this.setState({message : response.message})
+                    this.setState({loading : false});
                 }
         }
         else{
             alert("plz fill the form with valid inputs");
+            this.setState({loading : false});
         }
     }
 
+    componentDidMount(){
+        let Const = false;
+        try {
+            const token = localStorage.getItem('token');
+            jwt.verify(token,'secretkey');
+            Const = true;
+        } catch(e){
+            console.log(e);
+            Const = false;
+        }
+
+        if(Const) {
+            Router.push('/');
+        }
+    }
+    
     render(){
+        const { loading } = this.state;
         return(
             <Form>
                 <h1>Sign Up</h1>
@@ -68,7 +89,7 @@ export default class SignUpForm extends Component{
                     <label>Re-enter password</label>
                     <input placeholder='Last Name' value={this.state.respassword} onChange={event => this.setState({[event.target.name] : event.target.value})} name="repassword" />
                 </Form.Field>
-                <Button onClick={this.sumbitForm = this.sumbitForm.bind(this)} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
+                <Button loading={loading} onClick={this.sumbitForm = this.sumbitForm.bind(this)} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
                     Sign Up
                 </Button>
                 <h5 style={{textAlign : 'center'}}>By signing up, you agree to our <span><a>terms of use</a></span>, <span><a>privacy policy</a></span>, and <span><a>cookie policy.</a></span></h5>
