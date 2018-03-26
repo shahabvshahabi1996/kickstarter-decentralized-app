@@ -7,6 +7,7 @@ import Campaign from '../../campaign';
 import web3 from '../../web3';
 import SaveButton from '../components/SaveButton';
 import moment from 'moment';
+import jwt from 'jsonwebtoken';
 import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
 
 export default class Show extends Component{
@@ -18,7 +19,8 @@ export default class Show extends Component{
             loadingInput : false,
             data : undefined,
             dateInMilliSeconds : undefined,
-            isManager : false
+            isManager : false,
+            exp : undefined
         }
     }
 
@@ -65,8 +67,38 @@ export default class Show extends Component{
          };
     }
 
+    reportCamp = async () => {
+        this.setState({loadingReport : true});
+        const { token } = this.state;
+        const result = await fetch('http://localhost:8000/report/campagin/address',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                campaignAddress: this.props.address,
+                token
+            })
+        });
+        this.setState({loadingReport : false})
+        const response = await result.json();
+        console.log(response);
+    }
+
     async componentDidMount(){
-        const token = localStorage.getItem('token');
+        let exp;
+        let token;
+        try{
+            token = localStorage.getItem('token');
+            const decoded = jwt.verify(token,'secretkey');
+            exp = decoded.exp * 1000;
+        }catch(e){
+            exp = null;
+            token = null;
+            console.log(e);
+        }
+
         const result = await fetch('http://localhost:8000/find/campaign',{
             method: 'POST',
             headers: {
@@ -94,13 +126,14 @@ export default class Show extends Component{
             date : newDate ,
             dateInMilliSeconds : date , 
             isManager : isManger,
-            token
+            token,
+            exp
         });
     }
 
     render(){
         const { data , date , dateInMilliSeconds } = this.state;
-        console.log(data);
+        console.log(this.state);
         if(data)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>
@@ -156,18 +189,20 @@ export default class Show extends Component{
                                                 <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>Contributers</span>
                                             </div>
                                             <br/>
+                                            { dateInMilliSeconds > new Date().getTime() ? 
                                             <div>
                                                 <span style={{display : 'block',fontWeight : '600',fontSize : 18,color : 'rgba(65,109,234,0.9)'}}>{date}</span>
                                                 <span style={{color : '#aaa',fontWeight : '200',fontSize : 16}}>Days to go</span>
-                                            </div>
+                                            </div> : <div><Label color='red' horizontal>Has Expired</Label></div> }
                                             <br/>
-                                            {dateInMilliSeconds > new Date().getTime() && this.state.token ? <Card.Description>
+                                            { dateInMilliSeconds > new Date().getTime() ? <div>
+                                            {this.state.exp && this.state.token ? <Card.Description>
                                                 <Input fluid onChange={(e)=>{this.setState({inputValue : e.target.value})}} labelPosition='left' placeholder={`${web3.utils.fromWei(`${this.props.minimumContribution}`,'ether')}`} action>
                                                     <Label>ETH</Label>
                                                     <input disabled={this.state.loadingInput} value={this.state.inputValue} />
                                                     <Button loading={this.state.loadingInput} onClick={()=>{this.DonationInput(this.state.inputValue)}} style={{backgroundColor : '#416DEA',color : '#fff'}}>Contribute</Button>
                                                 </Input>
-                                            </Card.Description> : <div /> }
+                                            </Card.Description> : <div><Link route={'/login'}><Button content="Please login/sigup first for more info" fluid/></Link></div> }
                                             <Divider/>
                                             <div>
                                                 <Grid stackable>
@@ -176,7 +211,7 @@ export default class Show extends Component{
                                                                 <SaveButton />
                                                             </Grid.Column>
                                                             <Grid.Column>
-                                                                {dateInMilliSeconds > new Date().getTime() && this.state.token ? <div>
+                                                                {this.state.exp && this.state.token ? <div>
                                                                     <Button loading={this.state.loading} onClick={()=>{this.DonationButton(web3.utils.fromWei(this.props.minimumContribution,'ether'))}} className="item" style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
@@ -197,6 +232,7 @@ export default class Show extends Component{
                                                         </Grid.Row>
                                                 </Grid>
                                             </div>
+                                            </div> : <div><Label color='red' horizontal>Has Expired</Label></div> } 
                                             <div>
                                                 <Grid stackable>
                                                     <Grid.Row columns={1}>
@@ -233,8 +269,8 @@ export default class Show extends Component{
                             </Grid.Row>
                         </Grid>
                         </div>
-                        {this.state.token && dateInMilliSeconds > new Date().getTime() ? <div style={{marginTop : '10px'}}>
-                            <Button content="Report Project" />
+                        {this.state.token && this.state.exp && dateInMilliSeconds > new Date().getTime() ? <div style={{marginTop : '10px'}}>
+                            <Button onClick={this.reportCamp} loading={this.state.loadingReport} content="Report Project" />
                         </div> : <div/> }
                                         
                     </Container>
