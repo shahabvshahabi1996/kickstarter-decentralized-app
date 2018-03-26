@@ -53,7 +53,7 @@ module.exports = (app) => {
         userController.likeCampagin
     )
 
-    app.route('/report/campagin/:address')
+    app.route('/report/campagin/address')
     .post(
         authController.verifyToken,
         userController.reportCampagin
