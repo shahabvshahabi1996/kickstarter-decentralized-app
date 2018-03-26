@@ -10,8 +10,26 @@ export default class LoginForm extends Component{
             password : ''
         }
     }
+
+    componentDidMount(){
+        let Const = false;
+        try {
+            const token = localStorage.getItem('token');
+            jwt.verify(token,'secretkey');
+            Const = true;
+        } catch(e){
+            console.log(e);
+            Const = false;
+        }
+
+        if(Const) {
+            Router.push('/');
+        }
+    }
+
     async onSubmit(){
         const { password , email } = this.state;
+        this.setState({loading : true});
         if(password.length > 0 && email.length > 0){
             const res = await fetch('http://localhost:8000/login', {
                         method: 'POST',
@@ -30,6 +48,7 @@ export default class LoginForm extends Component{
                 localStorage.setItem('token',response.token);
                 Router.push('/');
             }
+            this.setState({loading : false});
             console.log(response);
         }
 
@@ -38,6 +57,7 @@ export default class LoginForm extends Component{
         }
     }
     render(){
+        const {loading} = this.state;
         return(
             <Form>
                 <h1>Sign In</h1>
@@ -51,7 +71,7 @@ export default class LoginForm extends Component{
                     <input value={this.state.password} name="password" onChange={(event) => {this.setState({[event.target.name] : event.target.value})}} placeholder='password' />
                     <label floated="right"><a href="#">Forgot password ?</a></label>
                 </Form.Field>
-                <Button onClick={this.onSubmit = this.onSubmit.bind(this)} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
+                <Button loading={loading} onClick={this.onSubmit = this.onSubmit.bind(this)} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
                     Log in
                 </Button>
                 <Form.Field>
