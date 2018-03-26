@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 var Campaign = require('../model/campaignModel');
-
+var Report = require('../model/reportsModel');
+var User = require('../model/userModel');
 
 exports.getAllCampaigns = async (req,res) => {
     const result = await Campaign.find({});
@@ -80,8 +81,20 @@ exports.likeCampagin = (req,res) => {
     
 }
 
-exports.reportCampagin = (req,res) => {
-    
+exports.reportCampagin = async (req,res) => {
+    const user = await User.findOne({token : req.body.token});
+    console.log(user);
+    await new Report({
+        campaignAddress : req.body.campaignAddress,
+        user : user._id
+    }).save((err)=>{
+        if(err)
+            res.json({status : "success",data : err});
+        else{
+            res.json({status : "success",data : "you have success fully report a campaign"});
+        }
+    })
+
 }
 
 exports.sendEmail = (req,res) => {
