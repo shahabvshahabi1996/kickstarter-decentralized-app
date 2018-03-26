@@ -15,8 +15,9 @@ var reportSchema = new Schema({
         type : String,
         unique : true
     },
-    count : {
-        type : Number
+    user : {    
+        type : mongoose.Schema.ObjectId,
+        ref : 'User'
     }
 
 });
