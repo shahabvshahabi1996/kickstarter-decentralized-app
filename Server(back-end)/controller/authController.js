@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 exports.verifyToken = async (req,res,next) => {
-
+    console.log(req.body);
     jwt.verify(req.body.token , 'secretkey' , (err,decoded)=>{
         if(!err){
             next();
@@ -186,6 +186,22 @@ exports.logout = async (req,res) => {
             status : 'error',
             message : 'there is a problem with your logging out!'
         });
+    }
+}
+
+exports.findUser = async (req , res) => {
+    const user = await User.findOne({token : req.body.token});
+    if(user){
+        res.json({
+            data : user,
+            status : 'success'
+        });
+
+        return;
+    }
+
+    else{
+        return;
     }
 }
 
