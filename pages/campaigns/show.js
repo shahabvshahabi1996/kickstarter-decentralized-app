@@ -110,10 +110,25 @@ export default class Show extends Component{
             })
         });
         
+        const isUser = await fetch('http://localhost:8000/find/user',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token : token
+            })
+        });
+
+        const resUser = await isUser.json();
+        console.log(resUser);
+
         let isManger = false;
         let user = await web3.eth.getAccounts();
         const campResult = await result.json();
-        if(campResult.data.manager === user[0]){
+        console.log(campResult);       
+        if(campResult.data.user === resUser.data._id ){
             isManger = true;
         }
         let nonDate = campResult.data.expiredDate.slice(0,10);
@@ -205,10 +220,11 @@ export default class Show extends Component{
                                             </Card.Description> : <div><Link route={'/login'}><Button content="Please login/sigup first for more info" fluid/></Link></div> }
                                             <Divider/>
                                             <div>
+                                                {this.state.isManager ? <p>You are admin</p> : <div/>}
                                                 <Grid stackable>
                                                         <Grid.Row columns={2}>
                                                             <Grid.Column>
-                                                                <SaveButton />
+                                                                { this.state.token ?  <SaveButton token = {this.state.token} address = {this.props.address} /> : <SaveButton />}
                                                             </Grid.Column>
                                                             <Grid.Column>
                                                                 {this.state.exp && this.state.token ? <div>
