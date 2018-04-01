@@ -104,6 +104,7 @@ export default class NewCampaginForm extends Component{
                 //fetch data and just redirect it to the home page
                 try {
                     this.setState({loading : true});
+                    const token = await localStorage.getItem('token');
                     let min = await web3.utils.toWei(minimumDonation,'ether');
                     let expect = await web3.utils.toWei(expectedBudget,'ether');
 
@@ -113,7 +114,6 @@ export default class NewCampaginForm extends Component{
                     });
                     
                     let campAddress = await factory.methods.tempAddress().call();
-
                     await fetch('http://localhost:8000/new/campaign', {
                         method: 'POST',
                         headers: {
@@ -121,6 +121,7 @@ export default class NewCampaginForm extends Component{
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
+                            token : token ,
                             name : campaginName,
                             author : author,
                             category : category,
@@ -132,6 +133,8 @@ export default class NewCampaginForm extends Component{
                             minimum : min,
                             description : aboutCampaign
                         })
+                    }).then(async (response) => {
+                        console.log(await response.json())
                     });
 
                     this.setState({loading : false});                    
