@@ -13,7 +13,7 @@ var reportSchema = new Schema({
     
     campaignAddress : {
         type : String,
-        unique : true
+        unique : false
     },
     user : {    
         type : mongoose.Schema.ObjectId,
