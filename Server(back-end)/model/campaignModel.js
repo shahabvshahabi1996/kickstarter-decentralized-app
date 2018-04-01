@@ -38,6 +38,11 @@ var campaignSchema = new Schema({
       unique : true,
       required : 'Plz enter a valid wallet address'  
     },
+    user : {
+        type : String,
+        unique : true,
+        required : true
+    },
     info : {
         type : String,
         required : 'Plz write some thing about your project'
