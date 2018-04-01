@@ -10,14 +10,14 @@ mongoose.Promise = global.Promise;
 /*------------------------------------------------------------------------*/
 
 var favoriteSchema = new Schema({
-    
     campaignAddress : {
         type : String,
-        unique : true
+        unique : false
     },
     user : {
         type : String,
-        unique : true
+        unique : true,
+        required : true
     }
 
 });
