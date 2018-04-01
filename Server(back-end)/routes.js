@@ -19,6 +19,7 @@ module.exports = (app) => {
 
     app.route('/login')
     .post(
+        authController.validateLogin,
         authController.verifyUserForLogIn,
         authController.signToken,
         authController.login
@@ -27,6 +28,12 @@ module.exports = (app) => {
     app.route('/find/campaign')
     .post(
         userController.findCampaign
+    )
+
+    app.route('/find/user')
+    .post(
+        authController.verifyToken,
+        authController.findUser
     )
 
     app.route('/new/campaign')
@@ -47,10 +54,22 @@ module.exports = (app) => {
         userController.removeCampagin
     )
 
-    app.route('/like/campaign/:address')
+    app.route('/like/campaign/address')
     .post(
         authController.verifyToken,
         userController.likeCampagin
+    )
+
+    app.route('/is/like/campaign/address')
+    .post(
+        authController.verifyToken,
+        userController.getLike
+    )
+
+    app.route('/dislike/campaign/address')
+    .post(
+        authController.verifyToken,
+        userController.dislikeCampaign
     )
 
     app.route('/report/campagin/address')
