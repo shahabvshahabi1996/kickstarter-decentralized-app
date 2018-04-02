@@ -1,6 +1,7 @@
 import React , {Component} from 'react';
 import {Popup , Icon} from 'semantic-ui-react';
 import web3 from '../../web3';
+import jwt from 'jsonwebtoken';
 
 export default class LikeButton extends Component{
     constructor(){
@@ -10,28 +11,38 @@ export default class LikeButton extends Component{
         }
     }
     async componentDidMount(){
-        const token = await localStorage.getItem('token');
+        let token;
+        try{
+            token = localStorage.getItem('token');
+            const decoded = jwt.verify(token,'secretkey');
+        }catch(e){
+            token = null;
+            console.log(e);
+        }
+
         if(token){
             this.setState({token : true});
-        }
-        const route = "http://localhost:8000/is/like/campaign/address";
-        const result = await fetch(route,{
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                campaignAddress: this.props.address,
-                token : token
-            })
-        });
-
-        const res = await result.json();
-        if(res.data){
-            this.setState({liked : true});
-        } else {
-            this.setState({liked : false});
+            const route = "http://localhost:8000/is/like/campaign/address";
+            const result = await fetch(route,{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    campaignAddress: this.props.address,
+                    token : token
+                })
+            });
+    
+            const res = await result.json();
+            if(res.data){
+                this.setState({liked : true});
+            } else {
+                this.setState({liked : false});
+            }
+        }else{
+            this.setState({token : false});
         }
     }
 
