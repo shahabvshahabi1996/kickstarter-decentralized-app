@@ -205,18 +205,74 @@ exports.findUser = async (req , res) => {
     }
 }
 
-exports.deleteAccount = (req,res) => {
+exports.deleteAccount = async (req,res) => {
+    User.findOneAndRemove({token : req.body.token} , (err) => {
+        if(err){
+            res.json({
+                status : 'err',
+                message : err
+            })
+        }else{
+            res.json({
+                status : 'success',
+                message : 'you have successfully deleted your profile!'
+            })
+        }
+    });
 
+    return;
 }
 
-exports.forgotPassword = (req,res) => {
+exports.forgotPassword = async (req,res,next) => {
+    const user = await User.findOne({email : req.body.email});
+    if(user) {
+        req.body.user = user;
+        next();
+        return;
+    }
 
+    else {
+        res.json({
+            status : 'err',
+            message : 'there is no email address like this'
+        });
+    }
+
+    return ;
 }
 
 exports.changePassword = (req,res) => {
+    User.findOneAndUpdate({token : req.body.token} , { password : req.body.password } , (err) => {
+        if(err) {
+            res.json({
+                status : 'err',
+                message : err
+            });
+        } else { 
+            res.json({
+                status : 'success' ,
+                message : 'you have successfully changed your password!'
+            });
+        }
+    });
 
+    return ;
 }
 
 exports.changeEmail = (req,res) => {
+    User.findOneAndUpdate({token : req.body.token} , { email : req.body.email } , (err) => {
+        if(err) {
+            res.json({
+                status : 'err',
+                message : err
+            });
+        } else { 
+            res.json({
+                status : 'success' ,
+                message : 'you have successfully changed your email!'
+            });
+        }
+    });
 
+    return ;
 }
