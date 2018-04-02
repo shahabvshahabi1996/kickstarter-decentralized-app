@@ -15,7 +15,7 @@ exports.getAllCampaigns = async (req,res) => {
 }
 
 exports.findCampaign = async (req,res) => {
-    
+
     const result = await Campaign.findOne({campaignAddress : req.body.campaignAddress})
     if(result){
         res.json({
@@ -73,12 +73,45 @@ exports.addCampagin = async (req,res) => {
     }
 }
 
-exports.removeCampagin = (req,res) => {
+exports.removeCampagin = async (req,res) => {
+    const user = await User.findOne({ token : req.body.token });
+    if(user){
+        await Campaign.findOneAndRemove({ user : user._id , campaignAddress : req.body.campaignAddress } , (err) => {
+            if(err){
+                res.json({status : 'error' , message : err })
+                return;
+            }else{
+                res.json({
+                    status : 'success',
+                    message : 'you have success fully deleted your campaign'
+                })
+                return;
+            }
+        });
+    }
 
+    return ;
 }
 
-exports.editCampagin = (req,res) => {
-    
+exports.editCampagin = async (req,res) => {
+    const user = await User.findOne({ token : req.body.token });
+    if(user){
+        await Campaign.findOneAndUpdate({ user : user._id , campaignAddress : req.body.campaignAddress } , { info : req.body.info , name : req.body.name , description : req.body.description } , (err) => {
+            if(err){
+                res.json({status : 'error' , message : err })
+                return;
+            }else{
+                res.json({
+                    status : 'success',
+                    message : 'you have success fully edited your campaign'
+                })
+                return;
+            }
+        });
+    }
+
+    return ;
+
 }
 
 exports.likeCampagin = async (req,res) => {
@@ -192,7 +225,4 @@ exports.sendEmail = (req,res) => {
 
 }
 
-exports.isValidUser = (req,res) => {
-
-}
 
