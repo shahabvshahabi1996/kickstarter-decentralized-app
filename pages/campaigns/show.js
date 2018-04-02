@@ -1,4 +1,4 @@
-import React , {Component} from 'react';
+import React , {Component , Fragment} from 'react';
 import marked from 'marked';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -67,6 +67,34 @@ export default class Show extends Component{
          };
     }
 
+    deleteCamp = async () => {
+        this.setState({deleteLoading : true});
+        const token = localStorage.getItem('token');
+        const route = "http://localhost:8000/delete/campaign/address";
+        const result = await fetch(route,{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                campaignAddress: this.props.address,
+                token
+            })
+        });
+
+        const res = await result.json();
+        if(res.status == 'success'){
+            Router.push('/');
+        }
+        else{
+            alert('there is a problem with your deleting !!!'); // must change to a toast
+        }
+        console.log(res);
+
+        this.setState({deleteLoading : false});
+    }
+
     reportCamp = async () => {
         this.setState({loadingReport : true});
         const { token } = this.state;
@@ -110,27 +138,27 @@ export default class Show extends Component{
             })
         });
         
-        const isUser = await fetch('http://localhost:8000/find/user',{
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token : token
-            })
-        });
-
-        const resUser = await isUser.json();
-        console.log(resUser);
-
+        if(token){
+            const isUser = await fetch('http://localhost:8000/find/user',{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token : token
+                })
+            });
+            var resUser = await isUser.json();
+        }
         let isManger = false;
         let user = await web3.eth.getAccounts();
         const campResult = await result.json();
-        console.log(campResult);       
-        if(campResult.data.user === resUser.data._id ){
-            isManger = true;
-        }
+        if(token){
+            if(campResult.data.user === resUser.data._id ){
+                isManger = true;
+            }
+        }       
         let nonDate = campResult.data.expiredDate.slice(0,10);
         let date = new Date(`${nonDate}`);
         var diff = new moment.duration(date.getTime() - Date.now());
@@ -144,6 +172,13 @@ export default class Show extends Component{
             token,
             exp
         });
+    }
+
+    collectMoney = async () => {
+        this.setState({collectLoading : true});
+
+        this.setState({collectLoading : false});
+        
     }
 
     render(){
@@ -220,7 +255,7 @@ export default class Show extends Component{
                                             </Card.Description> : <div><Link route={'/login'}><Button content="Please login/sigup first for more info" fluid/></Link></div> }
                                             <Divider/>
                                             <div>
-                                                {this.state.isManager ? <p>You are admin</p> : <div/>}
+                                                
                                                 <Grid stackable>
                                                         <Grid.Row columns={2}>
                                                             <Grid.Column>
@@ -261,8 +296,38 @@ export default class Show extends Component{
                                                                 <Icon name="location arrow" />
                                                                 Austin, TX
                                                             </span>
+                                                            {this.state.isManager ? <div> <Divider/> <Button content ="Collect Money" onClick={this.collectMoney} loading={this.state.collectLoading} fluid style={{
+                                                                        borderRadius : 1.5,
+                                                                        color : '#fff',
+                                                                        backgroundColor : '#416DEA',
+                                                                        border : 'none',
+                                                                        boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)',
+                                                                        padding : '12px',
+                                                                        width : '100%',
+                                                                        display : 'block',
+                                                                        textAlign : 'center',
+                                                                        fontSize : 15,
+                                                                        fontWeight : '600'}}/>
+                                                                        <br/> <Button
+                                                                        loading={this.state.deleteLoading}
+                                                                        onClick={this.deleteCamp} content ="Delete a Campaign" fluid style={{
+                                                                        borderRadius : 1.5,
+                                                                        color : '#fff',
+                                                                        backgroundColor : '#416DEA',
+                                                                        border : 'none',
+                                                                        boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)',
+                                                                        padding : '12px',
+                                                                        width : '100%',
+                                                                        display : 'block',
+                                                                        textAlign : 'center',
+                                                                        fontSize : 15,
+                                                                        fontWeight : '600'}}/>
+                                                                        <br/> <Divider/> </div>
+                                                                         : <div/>}
                                                         </Grid.Column>
+                                                        
                                                     </Grid.Row>
+                                                    
                                                 </Grid>
                                             </div>
                                         </Card.Content>
