@@ -11,7 +11,7 @@
     "compile": "node compile.js",
     "deploy": "node deploy.js",
     "dev": "node server.js",
-    "server": "node ./Server(back-end)/server.js"
+    "server": "nodemon ./Server/server.js"
   },
   "author": "Alireza Shahabi",
   "license": "MIT",
