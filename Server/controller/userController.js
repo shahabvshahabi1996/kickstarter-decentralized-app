@@ -115,13 +115,14 @@ exports.editCampagin = async (req,res) => {
 }
 
 exports.likeCampagin = async (req,res) => {
-    console.log(req.body);
     const user = await User.findOne({token : req.body.token});
+
     if(user){
-        await new Favorite({
+        new Favorite({
             campaignAddress : req.body.campaignAddress,
             user : user._id
         }).save(err => {
+            console.log(err);
             if(err){
                 res.json({
                     status : 'error',
@@ -150,8 +151,10 @@ exports.likeCampagin = async (req,res) => {
 
 exports.getLike = async (req , res) => {
     const user = await User.findOne({token : req.body.token});
+    console.log(user);
     if(user){
         const liked = await Favorite.findOne({ user : user._id , campaignAddress : req.body.campaignAddress });
+        console.log(`this is like : ${liked}`);
         if(liked){
             res.json({
                 status : 'success',
@@ -162,7 +165,7 @@ exports.getLike = async (req , res) => {
         }
         else {
             res.json({
-                status : 'success',
+                status : 'error',
                 data : false
             });
     

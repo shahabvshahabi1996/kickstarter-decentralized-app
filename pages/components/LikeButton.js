@@ -36,6 +36,7 @@ export default class LikeButton extends Component{
             });
     
             const res = await result.json();
+            console.log(res);
             if(res.data){
                 this.setState({liked : true});
             } else {
@@ -70,6 +71,7 @@ export default class LikeButton extends Component{
         });
         
         const res = await result.json();
+        console.log(res);
         this.setState({liked : !liked});
     }
     render(){
