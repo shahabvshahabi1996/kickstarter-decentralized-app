@@ -48,7 +48,7 @@ module.exports = (app) => {
         userController.editCampagin
     )
 
-    app.route('/delete/campaign/:address')
+    app.route('/delete/campaign/address')
     .post(
         authController.verifyToken,
         userController.removeCampagin
