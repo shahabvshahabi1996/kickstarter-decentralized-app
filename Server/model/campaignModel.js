@@ -40,7 +40,7 @@ var campaignSchema = new Schema({
     },
     user : {
         type : String,
-        unique : true,
+        unique : false,
         required : true
     },
     info : {
