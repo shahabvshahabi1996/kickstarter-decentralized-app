@@ -24,6 +24,11 @@ module.exports = (app) => {
         authController.signToken,
         authController.login
     )
+
+    app.route('/forgot/password')
+    .post(
+        authController.forgotPassword
+    )
 /*--------------------------------------------------*/
     app.route('/find/campaign')
     .post(
