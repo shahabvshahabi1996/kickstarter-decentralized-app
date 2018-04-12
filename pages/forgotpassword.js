@@ -15,7 +15,13 @@ export default class ForgotPassword extends Component{
                             <Grid.Row>
                                 <Grid.Column></Grid.Column>
                                 <Grid.Column>
-                                    <ForgotPasswordForm/>
+                                    <div style={{backgroundColor:'#fff',
+                                    padding : '15px',
+                                    margin : '5px',
+                                    boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)',
+                                    borderRadius : 1.5}}>
+                                        <ForgotPasswordForm/>
+                                    </div>
                                 </Grid.Column>
                                 <Grid.Column></Grid.Column>
                             </Grid.Row>
