@@ -33,7 +33,7 @@ export default class ForgotPasswordForm extends Component {
             if(res.status == 'err')
             alert(res.message);
             else {
-                alert('your password has send to your email address');
+                alert('your password has send to your email address && ' + res.message);
             }        
         } else {
             alert('plz enter a valid email address!');
