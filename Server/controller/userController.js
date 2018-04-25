@@ -3,6 +3,7 @@ var Campaign = require('../model/campaignModel');
 var Report = require('../model/reportsModel');
 var User = require('../model/userModel');
 var Favorite = require('../model/favoriteModel');
+var mail = require('../handlers/mail');
 
 
 exports.getAllCampaigns = async (req,res) => {
@@ -225,7 +226,28 @@ exports.reportCampagin = async (req,res) => {
 }
 
 exports.sendEmail = (req,res) => {
-
+    const password = req.body.user.password;
+    const email = req.body.user.email;
+    const mailOption = {
+        from: 'shahabvshahabi1996@gmail.com',
+        to: email,
+        subject: 'Sending Password',
+        text: `This is your password : ${password}`
+    };
+    mail.transporter.sendMail(mailOption,(err,info) => {
+        if (err) {
+            res.json({
+                status : 'err',
+                message : err
+            });
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.json({
+                status : 'success',
+                message : 'Your Password Is Sent To Your Email'
+            });
+        }
+    });
 }
 
 
