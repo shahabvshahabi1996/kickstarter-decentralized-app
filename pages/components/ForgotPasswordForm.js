@@ -31,10 +31,9 @@ export default class ForgotPasswordForm extends Component {
             const res = await response.json();
             console.log(res);
             if(res.status == 'err')
-            alert(res.message);
-            else {
-                alert('your password has send to your email address && ' + res.message);
-            }        
+                alert(res.message);
+            else
+                alert(res.message);     
         } else {
             alert('plz enter a valid email address!');
         } 
