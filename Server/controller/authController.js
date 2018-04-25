@@ -228,11 +228,11 @@ exports.forgotPassword = async (req,res,next) => {
     if(user) {
         req.body.user = user;
 
-        // next();
-        res.json({
-            status : 'success',
-            message : `your password is : ${user.password}`
-        })
+        next();
+        // res.json({
+        //     status : 'success',
+        //     message : `your password is : ${user.password}`
+        // })
         return;
     }
 
