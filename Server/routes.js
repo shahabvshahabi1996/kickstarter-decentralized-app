@@ -27,7 +27,8 @@ module.exports = (app) => {
 
     app.route('/forgot/password')
     .post(
-        authController.forgotPassword
+        authController.forgotPassword,
+        userController.sendEmail
     )
 /*--------------------------------------------------*/
     app.route('/find/campaign')
