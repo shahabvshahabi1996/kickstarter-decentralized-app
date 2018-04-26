@@ -69,7 +69,7 @@ export default class LoginForm extends Component{
                 <Form.Field>
                     <label>Password</label>
                     <input value={this.state.password} name="password" onChange={(event) => {this.setState({[event.target.name] : event.target.value})}} placeholder='password' />
-                    <label floated="right"><a href="/forgotpassword">Forgot password ?</a></label>
+                    <label floated="right"><a href="/forgot/password">Forgot password ?</a></label>
                 </Form.Field>
                 <Button loading={loading} onClick={this.onSubmit = this.onSubmit.bind(this)} fluid style={{borderRadius : 2,color : '#fff',backgroundColor : '#416DEA',boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)'}}>
                     Log in
