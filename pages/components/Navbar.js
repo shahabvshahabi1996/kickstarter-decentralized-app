@@ -12,7 +12,8 @@ export default class Navbar extends Component{
     }
 
     handleItemClick = (e, { name }) => {
-      Router.replace(`${name}`);
+      console.log('clickeD!');
+      Router.push(`${name}`);
       this.setState({ activeItem: name });
     } 
 
@@ -83,10 +84,10 @@ export default class Navbar extends Component{
                 content='Look for your dreamy project,and make it alive!'
                 on='focus'/>
               </Menu.Item>
-              <Menu.Item name={`/profile/${this.state.token}`} active={activeItem === '/profile'} >
+              <Menu.Item name={`/user/profile/show/${this.state.token}`} active={activeItem === '/user/profile/show/'}  >
               <Dropdown text={`${this.state.name}`} style={{fontWeight : 'bold'}} pointing='down' className='link item'>
                 <Dropdown.Menu>
-                  <Dropdown.Item>profile</Dropdown.Item>
+                  <Dropdown.Item name={`/user/profile/show/${this.state.token}`}onClick={this.handleItemClick} >profile</Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={this.logOut}>Log Out</Dropdown.Item>
                 </Dropdown.Menu>
