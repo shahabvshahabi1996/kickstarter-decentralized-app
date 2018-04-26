@@ -228,11 +228,12 @@ exports.reportCampagin = async (req,res) => {
 exports.sendEmail = (req,res) => {
     const password = req.body.user.password;
     const email = req.body.user.email;
+    const name = req.body.user.name;
     const mailOption = {
         from: 'shahabvshahabi1996@gmail.com',
         to: email,
-        subject: 'Sending Password',
-        text: `This is your password : ${password}`
+        subject: `Hi ${name} This is your Password`,
+        text: `This is your password : ${password} , ${name}!`
     };
     mail.transporter.sendMail(mailOption,(err,info) => {
         if (err) {
