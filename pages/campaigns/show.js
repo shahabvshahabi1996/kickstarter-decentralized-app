@@ -64,7 +64,7 @@ export default class Show extends Component{
             minimumContribution : summary[2],
             approversCount : summary[3],
             manager : props.query.manager
-         };
+        };
     }
 
     deleteCamp = async () => {
@@ -322,6 +322,21 @@ export default class Show extends Component{
                                                                         textAlign : 'center',
                                                                         fontSize : 15,
                                                                         fontWeight : '600'}}/>
+                                                                        <br/> <Button
+                                                                        loading={this.state.deleteLoading}
+                                                                         content ="Edit a Campaign" fluid style={{
+                                                                        borderRadius : 1.5,
+                                                                        color : '#fff',
+                                                                        backgroundColor : '#416DEA',
+                                                                        border : 'none',
+                                                                        boxShadow: '0px 5px 8px 0px rgba(0,0,0,0.2)',
+                                                                        padding : '12px',
+                                                                        width : '100%',
+                                                                        display : 'block',
+                                                                        textAlign : 'center',
+                                                                        fontSize : 15,
+                                                                        fontWeight : '600'}}/>
+                                                                        
                                                                         <br/> <Divider/> </div>
                                                                          : <div/>}
                                                         </Grid.Column>
