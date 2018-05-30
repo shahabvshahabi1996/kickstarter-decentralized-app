@@ -35,12 +35,10 @@ var campaignSchema = new Schema({
     },
     manager : {
       type : String,
-      unique : true,
       required : 'Plz enter a valid wallet address'  
     },
     user : {
         type : String,
-        unique : false,
         required : true
     },
     info : {
