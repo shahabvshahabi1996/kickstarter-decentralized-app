@@ -60,6 +60,7 @@ export default class CampaignIndex extends Component {
 
     render(){
         const { campaign } = this.state;
+        console.log(campaign)
         if(campaign)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
