@@ -12,10 +12,6 @@ export default class Profile extends Component {
         };
     }
 
-    componentDidMount(){
-
-    }
-
     render(){
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
