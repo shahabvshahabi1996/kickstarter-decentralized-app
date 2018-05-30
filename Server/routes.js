@@ -88,6 +88,17 @@ module.exports = (app) => {
     .get(
         userController.getAllCampaigns
     )
+
+    app.route('/find/user/campaign')
+    .post(
+        userController.findCampaignByUser
+    )
+
+    app.route('/find/all/user/likes')
+    .post(
+        authController.verifyToken,
+        userController.findAllUserLikes
+    )
 /*--------------------------------------------------*/
     
 }
