@@ -18,7 +18,7 @@ beforeEach(async()=>{
     .deploy({data : CampaignFactory.bytecode})
     .send({from : accounts[0],gas : '3000000'});
 
-    await factory.methods.createCampaign('100','new projetc','about','category','alireza','asdansdasndk','100000')
+    await factory.methods.createCampaign('100000')
     .send({from : accounts[0],gas : '3000000'});
 
     [campaignAddress] = await factory.methods.getAllCampaigns().call();
@@ -44,22 +44,11 @@ describe("Campaign",()=>{
     it('can count contributers',async ()=>{
         await campaign.methods.contribute().send({
             from : accounts[1],
-            value : '100'
+            value : web3.utils.toWei('10','ether')
         });
 
         const count = await campaign.methods.approversCount().call();
         assert.equal(count,1);
-    });
-
-    it('allows to people send their money and add them as approvers',async()=>{
-        await campaign.methods.contribute().send({
-            from : accounts[1],
-            value : '100'
-        });
-
-        const isContributor = await campaign.methods.approvers(accounts[1]).call(); 
-        assert(isContributor);
-        
     });
 
     it('has a minimum contribution',async()=>{
@@ -73,102 +62,24 @@ describe("Campaign",()=>{
         }
     });
 
-    it('allows a manager to make a payment request',async()=>{
-        await campaign.methods.createRequest('buying something','100',accounts[1]).send({
-            from : accounts[0],
-            gas : '1000000'
-        });
+    it('can collect the money(manager)',async () => {
+        let Oldbalance = await web3.eth.getBalance(accounts[0]);
+        Oldbalance = web3.utils.fromWei(Oldbalance,'ether');
+        Oldbalance = parseFloat(Oldbalance);
 
-        const request = await campaign.methods.requests(0).call();
-        assert.equal('buying something',request.description);
-    });
-
-    it('process requests',async()=>{
         await campaign.methods.contribute().send({
-            from : accounts[0],
+            from : accounts[1],
             value : web3.utils.toWei('10','ether')
         });
-        
-        await campaign.methods.createRequest('buying something',web3.utils.toWei('5','ether'),accounts[1]).send({
-            from : accounts[0],
-            gas : '1000000'
+        await campaign.methods.collectMoney().send({
+            from : accounts[0]
         });
-
-        await campaign.methods.approveRequest(0).send({
-            from : accounts[0],
-            gas : '1000000'
-        });
-
-        await campaign.methods.finalizeRequest(0).send({
-            from : accounts[0],
-            gas : '1000000'
-        });
-
-        let balance = await web3.eth.getBalance(accounts[1]);
+        let balance = await web3.eth.getBalance(accounts[0]);
 
         balance = web3.utils.fromWei(balance,'ether');
         balance = parseFloat(balance);
 
-        assert(balance >= 104);
-    });
-
-    it('goes wrong if normal user try to make request',async()=>{
-        try {
-            await campaign.methods.createRequest('buying something',web3.utils.toWei('5','ether'),accounts[1]).send({
-                from : accounts[1],
-                gas : '1000000'
-            });
-        } catch (error) {
-            assert(error)
-        }
-    });
-
-    it('goes wrong if normal user finalize the Request',async()=>{
-        try {
-            await campaign.methods.contribute().send({
-                from : accounts[0],
-                value : web3.utils.toWei('10','ether')
-            });
-            
-            await campaign.methods.createRequest('buying something',web3.utils.toWei('5','ether'),accounts[1]).send({
-                from : accounts[0],
-                gas : '1000000'
-            });
-    
-            await campaign.methods.approveRequest(0).send({
-                from : accounts[0],
-                gas : '1000000'
-            });
-    
-            await campaign.methods.finalizeRequest(0).send({
-                from : accounts[2],
-                gas : '1000000'
-            });
-        } catch (error) {
-            assert(error)
-        }
-    });
-
-    it('not allow to approve a request from a user that not donated',async()=>{
-        try {
-            await campaign.methods.contribute().send({
-                from : accounts[0],
-                value : web3.utils.toWei('10','ether')
-            });
-            
-            await campaign.methods.createRequest('buying something',web3.utils.toWei('5','ether'),accounts[1]).send({
-                from : accounts[0],
-                gas : '1000000'
-            });
-    
-            await campaign.methods.approveRequest(0).send({
-                from : accounts[2],
-                gas : '1000000'
-            });
-    
-        } catch (error) {
-            assert(error);     
-        }
+        assert(balance > Oldbalance);
     });
 });
 
