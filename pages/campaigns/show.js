@@ -39,21 +39,23 @@ export default class Show extends Component{
 
     async DonationInput(amount){
         console.log(amount);
+        this.setState({loadingInput : true})
         let Amount = await web3.utils.toWei(amount,'ether');
         if(Amount < this.props.minimumContribution){
             alert("plz enter a value more than minimin contribution!!!");
+            this.setState({loadingInput : false});
         }
-        else{
+        else {
             const campagin = await Campaign(this.props.address);
             let accounts = await web3.eth.getAccounts();
             await campagin.methods.contribute().send({
                 from : accounts[0],
                 value : Amount
             });
-            this.setState({loadingInput : true});
+            this.setState({loadingInput : false});
             Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
         }
-    }
+    } 
 
     static async  getInitialProps(props){
         const campagin = Campaign(props.query.address);
@@ -175,9 +177,28 @@ export default class Show extends Component{
     }
 
     collectMoney = async () => {
+
         this.setState({collectLoading : true});
 
+        const campagin = await Campaign(this.props.address);
+        let accounts = await web3.eth.getAccounts();
+        await campagin.methods.collectMoney().send({
+            from : accounts[0]
+        });
+
         this.setState({collectLoading : false});
+        Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
+    }
+
+    editCampaign = () => {
+
+    }
+
+    saveChanges = () => {
+
+    }
+
+    discardChanges = () => {
         
     }
 
@@ -254,6 +275,7 @@ export default class Show extends Component{
                                                 </Input>
                                             </Card.Description> : <div><Link route={'/login'}><Button content="Please login/sigup first for more info" fluid/></Link></div> }
                                             <Divider/>
+                                            <br/>
                                             <div>
                                                 
                                                 <Grid stackable>
@@ -284,6 +306,7 @@ export default class Show extends Component{
                                                 </Grid>
                                             </div>
                                             </div> : <div><Label color='red' horizontal>Has Expired</Label></div> } 
+                                            <br/>
                                             <div>
                                                 <Grid stackable>
                                                     <Grid.Row columns={1}>
@@ -310,7 +333,7 @@ export default class Show extends Component{
                                                                         fontWeight : '600'}}/>
                                                                         <br/> <Button
                                                                         loading={this.state.deleteLoading}
-                                                                        onClick={this.deleteCamp} content ="Delete a Campaign" fluid style={{
+                                                                        onClick={this.deleteCamp} content ="Delete Campaign" fluid style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
                                                                         backgroundColor : '#416DEA',
@@ -324,7 +347,7 @@ export default class Show extends Component{
                                                                         fontWeight : '600'}}/>
                                                                         <br/> <Button
                                                                         loading={this.state.deleteLoading}
-                                                                         content ="Edit a Campaign" fluid style={{
+                                                                         content ="Edit Campaign" fluid style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
                                                                         backgroundColor : '#416DEA',
