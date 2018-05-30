@@ -41,37 +41,36 @@ exports.addCampagin = async (req,res) => {
     console.log(req.body);
     const user = await User.findOne({ token : req.body.token});
     const campaign = await Campaign.findOne({user : user._id});
-    if(campaign){
-        res.json({ status : 'error' ,message : 'you can only make a single campaign at the moment' })
-        return;
-    }
-    else{
-        new Campaign({
-            name : req.body.name,
-            author : req.body.author,
-            category : req.body.category,
-            campaignAddress : req.body.campaignAddress,
-            manager : req.body.manager,
-            info : req.body.info,
-            image : req.body.image,
-            budget : req.body.budget,
-            minimum : req.body.minimum,
-            description : req.body.description,
-            user : user._id
-        }).save(async (err)=>{
-            if(err){
-                res.json({ status : 'error' ,message : err })
-                console.log(err);
-                return;
-            }
-            else{
-                const newCamp = await Campaign.findOne({campaignAddress : req.body.campaignAddress})
-                res.json({ status : 'success',message : 'you posted a new campagin',data : newCamp.campaignAddress});
-                
-                return;
-            }
-        })
-    }
+    // if(campaign){
+    //     res.json({ status : 'error' ,message : 'you can only make a single campaign at the moment' })
+    //     return;
+    // }
+    new Campaign({
+        name : req.body.name,
+        author : req.body.author,
+        category : req.body.category,
+        campaignAddress : req.body.campaignAddress,
+        manager : req.body.manager,
+        info : req.body.info,
+        image : req.body.image,
+        budget : req.body.budget,
+        minimum : req.body.minimum,
+        description : req.body.description,
+        user : user._id
+    }).save(async (err)=>{
+        if(err){
+            res.json({ status : 'error' ,message : err })
+            console.log(err);
+            return;
+        }
+        else{
+            const newCamp = await Campaign.findOne({campaignAddress : req.body.campaignAddress})
+            res.json({ status : 'success',message : 'you posted a new campagin',data : newCamp.campaignAddress});
+            
+            return;
+        }
+    })
+    
 }
 
 exports.removeCampagin = async (req,res) => {
@@ -251,4 +250,41 @@ exports.sendEmail = (req,res) => {
     });
 }
 
+exports.findCampaignByUser = async(req , res) => {
+    console.log(req.body);
+    let user = await User.findOne({token : req.body.token});
+    if(user) {
+        let campaign = await Campaign.find({user : user._id});
+    
+        res.json({
+            status : 'success',
+           data : campaign 
+        });
+    }
+    else {
+        return ;
+    }
+}
 
+exports.findAllUserLikes = async (req,res) => {
+    // console.log(req.body);
+    var allLikes = [];
+    let user = await User.findOne({token : req.body.token});
+    if(user) {
+        let favorites = await Favorite.find({user : user._id});
+        let promises = favorites.map(async(data,index) => {
+            let camp = await Campaign.findOne({campaignAddress : data.campaignAddress});
+            if(camp) allLikes.push(camp);
+        })
+
+        Promise.all(promises).then(()=>{
+            res.json({
+                status : 'success',
+                data : allLikes
+            });
+        })
+    }
+    else {
+        return ;
+    }
+}
