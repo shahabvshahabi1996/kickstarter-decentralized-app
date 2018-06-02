@@ -73,29 +73,7 @@ export default class CampaignIndex extends Component {
                                 padding : '2px',
                                 paddingLeft : '5px',
                                 paddingRight : '5px'}}>
-                                Top Campaigns
-                            </span>
-                            <span>
-                                <Button floated="right" icon style={{borderRadius : 2,
-                                    boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} 
-                                    labelPosition='right'>
-                                    View All 
-                                    <Icon name='right arrow' /> 
-                                </Button>
-                            </span>
-                        </h1>
-                        <h1>
-                            <span style={{ padding : '3.8px',
-                                paddingLeft : '6px',
-                                paddingRight : '6px',
-                                paddingBottom : '1.8px',
-                                paddingTop : '5.2px',
-                                backgroundColor : '#fff',
-                                borderRadius : 1.5,
-                                margin : '0px',
-                                fontSize : 25,
-                                boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
-                                <Category selected={(cat)=>{this.setState({category : cat})}}/>
+                                All Campaigns
                             </span>
                         </h1>
                         <br/>
@@ -104,23 +82,6 @@ export default class CampaignIndex extends Component {
                         <br/>
                     </Container>
                 </div>
-                {/* <div className="Recommended" style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
-                    <Container style={{margin : '10px'}}>
-                        <h1>
-                            <span style={{backgroundColor:'rgba(65,109,234,1)',padding : '2px' , paddingLeft : '5px' , paddingRight : '5px',color : '#fff'}}>
-                            Recomended
-                            </span>
-                        <span>
-                            <Button floated="right" icon style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>
-                            View All <Icon name='right arrow' />
-                            </Button>
-                        </span>
-                        </h1>
-                        <br/><br/>
-                        <Cards datas={datas}/>
-                        <br/><br/>
-                    </Container>
-                </div> */}
                 <div className="Blog"  style={{marginBottom : '10px',borderColor : '#eee',borderStyle:'solid',borderWidth : 1,marginTop : '10px',marginBottom : '0',padding : '15px',backgroundColor : '#fff'}}>
                     <Container style={{padding : '15px',margin: '10px'}}>
                         <h1 style={{color : '#fffff'}}><span style={{backgroundColor:'rgba(65,109,234,1)',padding : '2px' , paddingLeft : '5px' , paddingRight : '5px',color : '#fff'}}>Our Blog</span><span><Button icon floated="right" style={{borderRadius : 2,boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}} labelPosition='right'>View All <Icon name='right arrow' /> </Button></span></h1>
