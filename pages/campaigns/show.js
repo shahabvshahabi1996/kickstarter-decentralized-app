@@ -8,7 +8,7 @@ import web3 from '../../web3';
 import SaveButton from '../components/SaveButton';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
-import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Label , Progress,TextArea,Form } from 'semantic-ui-react';
+import {Divider, Grid, Container, Card, Icon, Image, Button, Input , Portal, Segment,Header , Label , Progress,TextArea,Form } from 'semantic-ui-react';
 
 export default class Show extends Component{
     constructor(){
@@ -16,13 +16,16 @@ export default class Show extends Component{
         this.state = {
             loading : false,
             inputValue : '',
+            open : false ,
             loadingInput : false,
             data : undefined,
             editLoading : false,
             dateInMilliSeconds : undefined,
             isManager : false,
             exp : undefined,
-            info : undefined
+            info : undefined,
+            message : '',
+            status : '',
         }
     }
 
@@ -36,6 +39,8 @@ export default class Show extends Component{
             value : Amount
         });
         this.setState({loading : false});
+        // this.getInitialProps();
+        // let s = new Show();
         Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
     }
 
@@ -55,6 +60,8 @@ export default class Show extends Component{
                 value : Amount
             });
             this.setState({loadingInput : false});
+            // this.getInitialProps();
+            
             Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
         }
     } 
@@ -112,10 +119,17 @@ export default class Show extends Component{
                 campaignAddress: this.props.address,
                 token
             })
+        }).then((response)=>{
+            return response.json()
+        }).then((res) => {
+            if(res.status == 'success') {
+                this.handlePortal('success','You have successfully reported this campaign!');                                           
+            }
+            this.setState({loadingReport : false})
+        }).catch(e => {
+            this.handlePortal('error','Something went wrong while reporting a campaign!');                                                       
         });
-        this.setState({loadingReport : false})
-        const response = await result.json();
-        console.log(response);
+
     }
 
     async componentDidMount(){
@@ -185,12 +199,17 @@ export default class Show extends Component{
 
         const campagin = await Campaign(this.props.address);
         let accounts = await web3.eth.getAccounts();
-        await campagin.methods.collectMoney().send({
+        let camp = await campagin.methods.collectMoney().send({
             from : accounts[0]
         });
 
-        this.setState({collectLoading : false});
-        Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
+        Promise.all(camp).then(()=>{
+            this.setState({collectLoading : false});
+            // this.getInitialProps();                            
+            Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)
+        }).catch(e=>{
+            this.handlePortal('error','Something went wrong while transfering money to your account!');                               
+        })
     }
 
     editCampaign = () => {
@@ -217,13 +236,25 @@ export default class Show extends Component{
             }).then(res => {
                 if(res.status == 'success'){
                     this.setState({editLoading : false});
-                    Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)                    
+                    // Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`) 
+                    this.componentDidMount()
+                    this.handlePortal('success','You have edited your campaign Successfully!');                   
                 } else {
-                    alert(res.message);
+                    this.handlePortal('error','Something went wrong while your editing!');                                       
                     this.setState({editLoading : false});
                 }
-            }) 
+            }).catch(e => {
+                    this.handlePortal('error','Something went wrong while your editing!');                                       
+                    this.setState({editLoading : false});
+            })  
         
+    }
+
+    handlePortal = (status , message) => {
+        this.setState({open : true, status , message});
+        setTimeout(()=>{
+            this.setState({open : false, status : '',message : '' })
+        },3000)
     }
 
     discardChanges = () => {
@@ -232,7 +263,7 @@ export default class Show extends Component{
     }
 
     render(){
-        const { data , date , dateInMilliSeconds } = this.state;
+        const { data , date , dateInMilliSeconds , open , status } = this.state;
         console.log(this.state);
         if(data)
         return(
@@ -242,6 +273,19 @@ export default class Show extends Component{
                     <Container style={{padding : '10px'}}>
                         <Grid stackable>
                             <Grid.Row>
+                                <Portal open={open}>
+                                    { status == 'success' ? 
+                                    <Segment style={{ right : '1%', position: 'fixed', top: '12%', zIndex: 1000 , backgroundColor : '#2ECC71'}}>
+                                        <Header>{this.state.status.toUpperCase()}</Header>
+                                        <p>{this.state.message}</p>
+                                    </Segment> 
+                                    : 
+                                    <Segment style={{ right : '1%', position: 'fixed', top: '12%', zIndex: 1000 , backgroundColor : '#E74C3C'}}>
+                                        <Header>{this.state.status.toUpperCase()}</Header>
+                                        <p>{this.state.message}</p>
+                                    </Segment> }
+                                    
+                                </Portal>
                                 <Grid.Column width={16}>
                                     <h1 style={{fontSize : 35}}>
                                     <span style={{backgroundColor : '#fff',padding : '5px',boxShadow: '0px 10px 8px 0px rgba(0,0,0,0.2)'}}>
