@@ -96,11 +96,15 @@ exports.removeCampagin = async (req,res) => {
 exports.editCampagin = async (req,res) => {
     const user = await User.findOne({ token : req.body.token });
     if(user){
-        await Campaign.findOneAndUpdate({ user : user._id , campaignAddress : req.body.campaignAddress } , { info : req.body.info , name : req.body.name , description : req.body.description } , (err) => {
+        // console.log()
+        console.log(user._id, 'user found!');
+        console.log(req.body.campaignAddress)
+        Campaign.findOneAndUpdate({ user : user._id , campaignAddress : req.body.campaignAddress } , {description : req.body.description } , (err,result) => {
+            console.log(result);
             if(err){
                 res.json({status : 'error' , message : err })
                 return;
-            }else{
+            } else {
                 res.json({
                     status : 'success',
                     message : 'you have success fully edited your campaign'
