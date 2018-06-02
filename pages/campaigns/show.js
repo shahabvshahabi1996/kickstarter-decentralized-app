@@ -18,9 +18,11 @@ export default class Show extends Component{
             inputValue : '',
             loadingInput : false,
             data : undefined,
+            editLoading : false,
             dateInMilliSeconds : undefined,
             isManager : false,
-            exp : undefined
+            exp : undefined,
+            info : undefined
         }
     }
 
@@ -168,6 +170,7 @@ export default class Show extends Component{
 
         this.setState({
             data : campResult.data ,
+            info : campResult.data.description,
             date : newDate ,
             dateInMilliSeconds : date , 
             isManager : isManger,
@@ -191,15 +194,41 @@ export default class Show extends Component{
     }
 
     editCampaign = () => {
-
+        this.setState({editLoading : true});
     }
 
-    saveChanges = () => {
-
+    saveChanges = async () => {
+        const { address } = this.props;
+        const { info , token } = this.state;
+        const route = `/edit/campaign/${address}`;
+        await fetch(`http://localhost:8000${route}`,{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    description : info,
+                    campaignAddress : address,
+                    token : token
+                })
+            }).then(result =>{
+                return result.json()   
+            }).then(res => {
+                if(res.status == 'success'){
+                    this.setState({editLoading : false});
+                    Router.replace(`/campaigns/show/${this.props.address}/${this.props.manager}`)                    
+                } else {
+                    alert(res.message);
+                    this.setState({editLoading : false});
+                }
+            }) 
+        
     }
 
     discardChanges = () => {
-        
+        const description = this.state.data.description;
+        this.setState({info : description,editLoading : false});        
     }
 
     render(){
@@ -346,7 +375,8 @@ export default class Show extends Component{
                                                                         fontSize : 15,
                                                                         fontWeight : '600'}}/>
                                                                         <br/> <Button
-                                                                        loading={this.state.deleteLoading}
+                                                                        loading={this.state.editLoading}
+                                                                        onClick = {this.editCampaign}
                                                                          content ="Edit Campaign" fluid style={{
                                                                         borderRadius : 1.5,
                                                                         color : '#fff',
@@ -382,14 +412,37 @@ export default class Show extends Component{
                         <Grid stackable>
                             <Grid.Row columns={1}>
                                 <Grid.Column>
+                                    {this.state.editLoading ? <div>
+                                        <Form>
+                                            <Form.Field>
+                                                <label>Try Editing Your Campaign So Easy Just Add Something in markDown and then hit save changes!!!</label>
+                                                <TextArea rows={1} value={this.state.info} onChange={(e)=>{this.setState({info : e.target.value})}} autoHeight placeholder='Try adding single lines to edit your campaign! in (markdown)'/> 
+                                            </Form.Field>
+                                        </Form>                                   
+                                    </div> : 
                                     <div dangerouslySetInnerHTML={{__html : marked(data.description)}}>
-                                    </div>
+                                    </div>}
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
                         </div>
                         {this.state.token && this.state.exp && dateInMilliSeconds > new Date().getTime() ? <div style={{marginTop : '10px'}}>
-                            <Button onClick={this.reportCamp} loading={this.state.loadingReport} content="Report Project" />
+                            {this.state.editLoading ? <div>
+                                <Button onClick={this.discardChanges} loading={this.state.loadingReport} content="Discard Changes" /> 
+                                <Button onClick={this.saveChanges} loading={this.state.loadingReport} content="Save Changes" style={{
+                                                                        color : '#fff',
+                                                                        borderRadius : 1.5,
+                                                                        backgroundColor : '#416DEA',
+                                                                        borderColor : '#fff',
+                                                                        borderWidth : 1,
+                                                                        borderStyle : 'solid',
+                                                                        padding : '12px',
+                                                                        textAlign : 'center',
+                                                                        fontSize : 15,
+                                                                        fontWeight : '600'}} />                                                                
+                            </div> : 
+                                <Button onClick={this.reportCamp} loading={this.state.loadingReport} content="Report Project" />
+                            }
                         </div> : <div/> }
                                         
                     </Container>
