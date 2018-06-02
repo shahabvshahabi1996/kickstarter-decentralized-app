@@ -19,7 +19,7 @@ export default class SignUpForm extends Component{
         const { name , email , password , repassword } = this.state;
         console.log(this.state);
         if(name.length > 0 && email.length > 0 && password === repassword){
-                const res = await fetch('http://localhost:8000/signup', {
+                const res = fetch('http://localhost:8000/signup', {
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
@@ -31,22 +31,27 @@ export default class SignUpForm extends Component{
                            password,
                            repassword
                         })
-                    });
+                    }).then((res) => {
+                        return res.json()
+                    }).then((response) => {
 
-                const response = await res.json();
-                if(response.status == 'success'){
-                    localStorage.setItem("token" , `${response.token}`);
-                    //redirect it to the admin or some where like that
-                    Router.push('/');
-                    this.setState({loading : false});
-                }
-                else{
-                    this.setState({message : response.message})
-                    this.setState({loading : false});
-                }
+                        if(response.status == 'success'){
+                            localStorage.setItem("token" , `${response.token}`);
+                            //redirect it to the admin or some where like that
+                            Router.push('/');
+                            this.setState({loading : false});
+                        }
+                        else{
+                            this.props.toast('error',response.message)
+                            this.setState({loading : false});
+                        }
+
+                    }).catch(e => {
+                        this.props.toast('error','Something went Wrong!')
+                    })                
         }
-        else{
-            alert("plz fill the form with valid inputs");
+        else {
+            this.props.toast('error',"plz fill the form with valid inputs");
             this.setState({loading : false});
         }
     }

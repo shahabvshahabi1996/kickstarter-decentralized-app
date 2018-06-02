@@ -70,20 +70,10 @@ export default class Navbar extends Component{
             <Menu.Item name='/' active={activeItem === '/'} onClick={this.handleItemClick}>
               <h2>KickStarter</h2>
             </Menu.Item>
-            <Menu.Item name='/explore' active={activeItem === '/explore'} onClick={this.handleItemClick}>
-            <h4>Explore</h4>
-            </Menu.Item>
             <Menu.Item name='/campaigns/new' active={activeItem === '/campaigns/new'} onClick={this.handleItemClick}>
               <h4>Start a campaign</h4>
             </Menu.Item>
             <Menu.Menu position='right'>
-              <Menu.Item>
-              <Popup
-                trigger={<Input icon='search' placeholder='Search...' />}
-                header='Campaign Search'
-                content='Look for your dreamy project,and make it alive!'
-                on='focus'/>
-              </Menu.Item>
               <Menu.Item name={`/user/profile/show/${this.state.token}`} active={activeItem === '/user/profile/show/'}  >
               <Dropdown text={`${this.state.name}`} style={{fontWeight : 'bold'}} pointing='down' className='link item'>
                 <Dropdown.Menu>
@@ -104,17 +94,7 @@ export default class Navbar extends Component{
             <Menu.Item name='/' active={activeItem === '/'} onClick={this.handleItemClick}>
               <h2>KickStarter</h2>
             </Menu.Item>
-            <Menu.Item name='/explore' active={activeItem === '/explore'} onClick={this.handleItemClick}>
-            <h4>Explore</h4>
-            </Menu.Item>
             <Menu.Menu position='right'>
-              <Menu.Item>
-              <Popup
-                trigger={<Input icon='search' placeholder='Search...' />}
-                header='Campaign Search'
-                content='Look for your dreamy project,and make it alive!'
-                on='focus'/>
-              </Menu.Item>
               <Menu.Item name='/login' active={activeItem === '/login'} onClick={this.handleItemClick}>
                 <h4>Sign In</h4>
               </Menu.Item>

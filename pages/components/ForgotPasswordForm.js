@@ -17,7 +17,7 @@ export default class ForgotPasswordForm extends Component {
         this.setState({loading : true});
         // calling API
         if(email.length > 0) {
-            const response = await fetch('http://localhost:8000/forgot/password', {
+            const response = fetch('http://localhost:8000/forgot/password', {
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
@@ -26,18 +26,22 @@ export default class ForgotPasswordForm extends Component {
                         body: JSON.stringify({
                             email
                         })
-                    });
-            
-            const res = await response.json();
-            console.log(res);
-            if(res.status == 'err')
-                alert(res.message);
-            else
-                alert(res.message);     
+                    }).then((response) => {
+                        return response.json()
+                    }).then((res) => {
+                        if(res.status == 'err')
+                            this.props.toast('error','There is no Email address like that!')
+                        else
+                            this.props.toast('success','Your Password Has Sent To your Email Account!')
+                        this.setState({loading : false});                                    
+                    }).catch(e => {
+                        this.setState({loading : false});            
+                        this.props.toast('error','Something Went Wrong While Proccess!')                        
+                    });            
         } else {
-            alert('plz enter a valid email address!');
+            this.props.toast('error','Plz Enter a email address!')            
+            this.setState({loading : false});
         } 
-        this.setState({loading : false});
     }
 
     render(){

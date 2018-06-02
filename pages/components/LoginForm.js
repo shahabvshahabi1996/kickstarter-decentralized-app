@@ -1,6 +1,7 @@
 import React , {Component} from 'react'
 import { Button, Checkbox, Form , Divider } from 'semantic-ui-react';
 import { Router } from '../../routes';
+import jwt from 'jsonwebtoken';
 
 export default class LoginForm extends Component{
     constructor(){
@@ -31,7 +32,7 @@ export default class LoginForm extends Component{
         const { password , email } = this.state;
         this.setState({loading : true});
         if(password.length > 0 && email.length > 0){
-            const res = await fetch('http://localhost:8000/login', {
+            const res = fetch('http://localhost:8000/login', {
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
@@ -41,19 +42,25 @@ export default class LoginForm extends Component{
                             password ,
                             email
                         })
-                    });
-    
-            const response = await res.json();
-            if(response.status == 'success'){
-                localStorage.setItem('token',response.token);
-                Router.push('/');
-            }
-            this.setState({loading : false});
-            console.log(response);
+                    }).then((response) => {
+                        return response.json()
+                    }).then((res) => {
+                        if(res.token){
+                            localStorage.setItem('token',res.token);
+                            Router.push('/');
+                        } else {
+                            this.props.toast('error',res.message);
+                            this.setState({loading : false});
+                        }
+                    }).catch(e => {
+                            this.props.toast('error','Something went wrong!');
+                            this.setState({loading : false});
+                    })
         }
 
         else{
-            alert('plz fill the form validly');
+            this.props.toast('error','plz fill the form validly');
+            this.setState({loading : false});
         }
     }
     render(){
