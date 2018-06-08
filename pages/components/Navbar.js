@@ -34,7 +34,8 @@ export default class Navbar extends Component{
       if(result.status == 'success'){
         this.setState({token : undefined});
         localStorage.removeItem('token');
-        Router.push('/'); 
+        console.log('changing the routes!');
+        this.props.refresh('/'); 
       }
 
       else{

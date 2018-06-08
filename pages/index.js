@@ -9,6 +9,8 @@ import Category from './components/Category';
 import Footer from './components/Footer';
 
 import factory from '../factory';
+import {Router} from '../routes';
+
 
 const datas = [
     {
@@ -58,13 +60,17 @@ export default class CampaignIndex extends Component {
         this.setState({campaign : campaign.data})
     }
 
+    refresh = (route) => {
+        Router.push(route)
+    }
+
     render(){
         const { campaign } = this.state;
         console.log(campaign)
         if(campaign)
         return(
             <div style={{backgroundColor:'rgba(65,109,234,1)'}}>    
-                <Navbar/>
+                <Navbar refresh={this.refresh}/>
                 <div className="TopCampaign">
                     <Container style={{padding : '15px',margin: '10px'}}>
                         <h1 style={{color : '#252525'}}>
