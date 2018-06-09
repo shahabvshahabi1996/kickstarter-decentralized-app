@@ -36,10 +36,10 @@ this is a copy of Real [Kickstarter](https://www.kickstarter.com/) web app built
 #### Server (Nextjs - front-end)
 > for running your front-end after installing `node_module` and after running your **Nodejs Server** via command `npm install` simply run `npm run dev` and then go to the http://localhost:3000/
 
-### Compiling 
+#### Compiling 
 > for compiling your contract after installing `node_module` simply run `npm run compile`
 
-### Deploying on Rinkeby Test Network 
+#### Deploying on Rinkeby Test Network 
 > for deploying your contract after installing `node_module` and compiling simply run `npm run deploy`
 
 #### Test
@@ -47,7 +47,7 @@ this is a copy of Real [Kickstarter](https://www.kickstarter.com/) web app built
 
 
 ## Demo :smile: :sunglasses: :stuck_out_tongue:
-for Working With Demo You Can Click On Link Below and **do not forget** to give me :star2: :star2: :star2: :star2:  
+for Working With Demo You Can Click On Link Below and **Do Not Forget** to give me :star2: :star2: :star2: :star2:  
 [Check Out Demo! :smile:](https://kickstarter-next-app.herokuapp.com/)
 
 
