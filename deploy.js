@@ -7,7 +7,7 @@ const Campaign = require('./build/Campaign.json');
 const CampaignFactory = require('./build/CampaignFactory.json');
 
 var provider = new HDWalletProvider(
-    'energy damp enlist panic transfer ensure vague guard laugh crowd man stomach',
+    'Your Account Memomnic',
     'https://rinkeby.infura.io/YfN9MatBIrqHOPqfZz5l'
 );
 
